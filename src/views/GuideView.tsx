@@ -33,7 +33,10 @@ import {
   BarChart3,
   Wifi,
   Receipt,
-  FileSpreadsheet
+  FileSpreadsheet,
+  KeyRound,
+  Image as ImageIcon,
+  Palette
 } from 'lucide-react';
 
 interface GuideChapter {
@@ -80,8 +83,21 @@ export const GuideView: React.FC = () => {
 
   const chapters: GuideChapter[] = [
     {
-      id: 'maquininhas',
+      id: 'cadastro_pix',
       number: '01',
+      title: 'Cadastro (CPF ou CNPJ) & Chave PIX Única da Distribuidora',
+      badge: 'Início & PIX',
+      icon: <KeyRound className="w-5 h-5 text-amber-500" />,
+      summary: 'Como cadastrar sua distribuidora com CPF (sem CNPJ) ou CNPJ, escolher o plano ideal para seu perfil e vincular sua Chave PIX exclusiva para recebimento direto de vendas.',
+      targetPage: 'register',
+      targetPageLabel: 'Ver Tela de Cadastro',
+      accentColor: 'text-amber-800',
+      accentBg: 'bg-amber-50',
+      accentBorder: 'border-amber-500'
+    },
+    {
+      id: 'maquininhas',
+      number: '02',
       title: 'Conectar e Operar Maquininhas (Smart POS Ton / Stone)',
       badge: 'Hardware & PIX',
       icon: <Smartphone className="w-5 h-5 text-emerald-400" />,
@@ -94,7 +110,7 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'vendas',
-      number: '02',
+      number: '03',
       title: 'Fazer Vendas no Balcão (PDV Caixa Rápido)',
       badge: 'Frente de Caixa',
       icon: <Store className="w-5 h-5 text-amber-400" />,
@@ -107,8 +123,8 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'mesas',
-      number: '03',
-      title: 'Gestão de Mesas, Deck e Comandas',
+      number: '04',
+      title: 'Gestão de Mesas, Deck e Comandas de Salão',
       badge: 'Atendimento',
       icon: <UtensilsCrossed className="w-5 h-5 text-blue-400" />,
       summary: 'Mapa visual com status de cores (Livre, Ocupada, Pediu Conta, Fechando), lançamento de pedidos, edição de capacidade e fechamento com taxa de serviço e PIX.',
@@ -120,11 +136,11 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'cardapio',
-      number: '04',
+      number: '05',
       title: 'Cardápio Digital QR Code (Autoatendimento)',
       badge: 'Autoatendimento',
       icon: <QrCode className="w-5 h-5 text-purple-400" />,
-      summary: 'Geração e impressão de plaquinhas acrílicas em lote para mesas e balcão, pedidos direto do celular do cliente sem instalar app e aviso sonoro no bar.',
+      summary: 'Como clientes pedem direto do smartphone sem baixar aplicativo, identificação automática de mesas e aviso sonoro de novo pedido no bar.',
       targetPage: 'menu',
       targetPageLabel: 'Ver Cardápio Digital',
       accentColor: 'text-purple-700',
@@ -132,8 +148,21 @@ export const GuideView: React.FC = () => {
       accentBorder: 'border-purple-500'
     },
     {
+      id: 'edicao_cardapio',
+      number: '06',
+      title: 'Edição & Customização do Cardápio Digital',
+      badge: 'Personalização',
+      icon: <Palette className="w-5 h-5 text-amber-400" />,
+      summary: 'Como trocar foto de capa e logotipo, configurar horários, taxa de delivery, organizar categorias em destaque e imprimir plaquinhas acrílicas em lote A4.',
+      targetPage: 'settings',
+      targetPageLabel: 'Configurar Cardápio',
+      accentColor: 'text-amber-700',
+      accentBg: 'bg-amber-50',
+      accentBorder: 'border-amber-500'
+    },
+    {
       id: 'produtos',
-      number: '05',
+      number: '07',
       title: 'Produtos, Categorias & Margem de Lucro',
       badge: 'Catálogo',
       icon: <Package className="w-5 h-5 text-teal-400" />,
@@ -146,8 +175,8 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'estoque_atacado',
-      number: '06',
-      title: 'Estoque do Galpão & Módulo Atacado (B2B)',
+      number: '08',
+      title: 'Estoque de Varejo & Módulo Atacado (B2B)',
       badge: 'Operação B2B',
       icon: <Boxes className="w-5 h-5 text-rose-400" />,
       summary: 'Controle de caixas, fardos e unidades no depósito, entradas/saídas com responsável e módulo Atacado B2B com faturamento PJ, tabela por fardo e prazos.',
@@ -159,7 +188,7 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'extrato',
-      number: '07',
+      number: '09',
       title: 'Extrato dos Meses Passados & Financeiro',
       badge: 'Financeiro',
       icon: <FileText className="w-5 h-5 text-amber-400" />,
@@ -172,8 +201,8 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'cola_caixa',
-      number: '08',
-      title: 'Guia de Bolso: Cola Rápida para o Caixa',
+      number: '10',
+      title: 'Guia de Bolso: Cola Rápida para o Operador do Caixa',
       badge: 'Cola Rápida',
       icon: <Zap className="w-5 h-5 text-indigo-400" />,
       summary: 'Folha prática para imprimir e colar na parede do caixa com os atalhos essenciais, passos de abertura/fechamento e segurança do PIX.',
@@ -183,8 +212,8 @@ export const GuideView: React.FC = () => {
     },
     {
       id: 'faq',
-      number: '09',
-      title: 'Perguntas Frequentes (FAQ) & Dicas de Ouro',
+      number: '11',
+      title: 'Perguntas Frequentes (FAQ) & Procedimentos Operacionais',
       badge: 'Suporte',
       icon: <HelpCircle className="w-5 h-5 text-slate-400" />,
       summary: 'Respostas para dúvidas operacionais frequentes, procedimentos quando o Wi-Fi cai e permissões de funcionários.',
@@ -252,6 +281,16 @@ export const GuideView: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <a
+            href="/bebeaqui-projeto-completo.zip"
+            download="bebeaqui-projeto-completo.zip"
+            className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow"
+            title="Baixar arquivo .ZIP com todo o código fonte pronto para o GitHub"
+          >
+            <Package className="w-4 h-4 text-amber-400" />
+            <span>Baixar Projeto (.ZIP)</span>
+          </a>
+
           <button
             type="button"
             onClick={handleCopyGuideLink}
@@ -318,8 +357,8 @@ export const GuideView: React.FC = () => {
               {checklist.step1_pix ? <CheckSquare className="w-4 h-4 text-emerald-400" /> : <Square className="w-4 h-4 text-slate-500" />}
             </div>
             <div>
-              <strong className="block text-white font-bold">1. Chave PIX Oficial</strong>
-              <span className="text-[11px] text-slate-400">Configurada em "Configurações & PIX".</span>
+              <strong className="block text-white font-bold">1. Cadastro CPF/CNPJ & PIX Único</strong>
+              <span className="text-[11px] text-slate-400">Chave exclusiva para receber vendas no balcão e maquininha.</span>
             </div>
           </div>
 
@@ -520,8 +559,8 @@ export const GuideView: React.FC = () => {
               </div>
               <div className="flex flex-wrap items-center gap-4 text-slate-700 font-mono text-[11px]">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">CNPJ:</span>
-                  <span className="font-bold">{activeCompany.cnpj}</span>
+                  <span className="text-slate-400 block text-[10px]">{activeCompany.documentType === 'cpf' ? 'CPF:' : 'CNPJ:'}</span>
+                  <span className="font-bold">{activeCompany.document || activeCompany.cnpj}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block text-[10px]">LOCALIZAÇÃO:</span>
@@ -530,6 +569,10 @@ export const GuideView: React.FC = () => {
                 <div>
                   <span className="text-slate-400 block text-[10px]">CHAVE PIX VALIDADA:</span>
                   <span className="font-bold text-emerald-800">{activeCompany.bankDetails?.pixKey}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[10px]">PLANO CONTRATADO:</span>
+                  <span className="font-bold text-amber-700">{activeCompany.plan || 'Plano BebêAqui'}</span>
                 </div>
               </div>
             </div>
@@ -565,7 +608,147 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 01: CONECTAR MAQUININHAS                                           */}
+        {/* MÓDULO 01: CADASTRO COM CPF/CNPJ & CHAVE PIX ÚNICA                        */}
+        {/* ========================================================================= */}
+        {(printFilter === 'all' || printFilter === 'cadastro_pix') && (
+          <div id="sec-cadastro_pix" className="page-break-before space-y-5 pt-4">
+            <div className="flex items-start justify-between gap-4 border-b-2 border-amber-500 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <KeyRound className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 01</span>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+                    Cadastro (CPF ou CNPJ) & Chave PIX Única da Distribuidora
+                  </h2>
+                </div>
+              </div>
+
+              <div className="no-print flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handlePrintSingleChapter('cadastro_pix', 'Cadastro & Chave PIX')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Imprimir Módulo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePage('register')}
+                  className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
+                >
+                  <span>Tela de Cadastro</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-700 leading-relaxed">
+              O BebêAqui foi projetado para acolher <strong>tanto distribuidores com CNPJ quanto adegas, depósitos familiares e comércios que operam por CPF</strong>. O processo de ativação é imediato, com vinculação de uma <strong>Chave PIX Única</strong> que direciona todas as vendas da sua loja direto para a sua conta bancária pessoal ou empresarial.
+            </p>
+
+            {/* 3 Pilares do Cadastro e PIX */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center">
+                  1
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Cadastro por CPF ou CNPJ</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Não possui CNPJ? Basta clicar em <strong>"Cadastro por CPF"</strong>. O sistema valida os 11 dígitos do CPF do titular em tempo real e libera 100% dos recursos do sistema (PDV, Mesas, Comandas, Estoque e Cardápio).
+                </p>
+                <div className="p-2 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 font-medium">
+                  ✔ Sem exigência de CNPJ para abrir sua conta.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center">
+                  2
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Sua Chave PIX Única</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  O assinante escolhe qual chave quer usar para receber: <strong>CPF, Celular, CNPJ, E-mail ou Aleatória EVP</strong>. Informa o Favorecido e o Banco (Nubank, Inter, Caixa, Itaú, etc.).
+                </p>
+                <div className="p-2 bg-emerald-50 rounded-lg border border-emerald-200 text-[10px] text-emerald-900 font-medium">
+                  ✔ O dinheiro das vendas entra 100% na sua conta (zero intermediários).
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-blue-600 text-white font-black flex items-center justify-center">
+                  3
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Planos Sob Medida</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Escolha o plano que melhor se adapta à realidade da sua empresa: Distribuidora Varejo, Atacado Exclusivo B2B ou Combo Integrado. Você pode alternar de plano conforme sua distribuidora cresce.
+                </p>
+                <div className="p-2 bg-blue-50 rounded-lg border border-blue-200 text-[10px] text-blue-900 font-medium">
+                  ✔ Flexibilidade total para seu modelo de negócio.
+                </div>
+              </div>
+            </div>
+
+            {/* Destaque: Como a Chave PIX opera no Balcão, Mesas e Maquininhas */}
+            <div className="avoid-page-break p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl space-y-3 text-xs text-slate-800">
+              <div className="flex items-center gap-2 text-amber-950 font-black text-sm">
+                <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0" />
+                <span>Onde a sua Chave PIX Exclusiva entra em ação no sistema</span>
+              </div>
+              <p className="text-slate-700 leading-relaxed">
+                Assim que a sua chave PIX exclusiva é configurada (no cadastro ou na tela de Configurações), ela passa a comandar todas as saídas de cobrança:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 bg-white rounded-xl border border-amber-200 space-y-1">
+                  <strong className="text-slate-900 block font-bold">1. No PDV (Balcão)</strong>
+                  <p className="text-[11px] text-slate-600">Ao cobrar uma venda em PIX, a tela gera o QR Code com a sua chave e confirma a entrada.</p>
+                </div>
+                <div className="p-3 bg-white rounded-xl border border-amber-200 space-y-1">
+                  <strong className="text-slate-900 block font-bold">2. Nas Mesas & Cardápio</strong>
+                  <p className="text-[11px] text-slate-600">O cliente na mesa escaneia a plaquinha QR Code e faz o PIX direto para o seu favorecido.</p>
+                </div>
+                <div className="p-3 bg-white rounded-xl border border-amber-200 space-y-1">
+                  <strong className="text-slate-900 block font-bold">3. No Modo Maquininha</strong>
+                  <p className="text-[11px] text-slate-600">Na maquininha Ton/Stone, o operador toca em "PIX" e o QR Code oficial aparece na tela do aparelho.</p>
+                </div>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-amber-200 flex flex-wrap items-center justify-between gap-4 font-mono text-[11px]">
+                <div>
+                  <span className="text-slate-500 block text-[10px]">Sua Empresa Cadastrada:</span>
+                  <strong className="text-slate-950">{activeCompany.tradeName}</strong> ({activeCompany.documentType === 'cpf' ? 'CPF' : 'CNPJ'})
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">Chave PIX de Recebimento:</span>
+                  <strong className="text-emerald-700 font-bold">{activeCompany.bankDetails?.pixKey}</strong> ({activeCompany.bankDetails?.pixKeyType?.toUpperCase()})
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">Titular / Favorecido:</span>
+                  <strong className="text-slate-900 font-bold">{activeCompany.bankDetails?.beneficiaryName || activeCompany.tradeName}</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Dica Técnica: Qualidade das Fotos no Catálogo */}
+            <div className="avoid-page-break p-3.5 bg-slate-50 border border-slate-300 rounded-xl flex items-start gap-3 text-xs text-slate-700">
+              <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center shrink-0">
+                <ImageIcon className="w-4 h-4 text-slate-800" />
+              </div>
+              <div className="space-y-1">
+                <strong className="text-slate-900 block font-bold">Qualidade Visual do Catálogo de Bebidas</strong>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Todas as fotos de cervejas, destilados e refrigerantes contam com <strong>banco de imagens de alta resolução</strong> e carregamento ultra-rápido otimizado para celulares e maquininhas. O cardápio digital permanece sempre nítido e atrativo para aumentar as vendas por impulso.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* ========================================================================= */}
+        {/* MÓDULO 02: A ÁREA DAS MAQUININHAS (SMART POS TON / STONE)                 */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'maquininhas') && (
           <div id="sec-maquininhas" className="page-break-before space-y-5 pt-4">
@@ -575,9 +758,9 @@ export const GuideView: React.FC = () => {
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Módulo 01</span>
+                  <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Módulo 02</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Como Conectar e Operar Maquininhas (Smart POS Ton / Stone)
+                    A Área das Maquininhas: Conexão & Operação Smart POS (Ton / Stone / PagBank)
                   </h2>
                 </div>
               </div>
@@ -585,7 +768,7 @@ export const GuideView: React.FC = () => {
               <div className="no-print flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => handlePrintSingleChapter('maquininhas', 'Conectar Maquininhas')}
+                  onClick={() => handlePrintSingleChapter('maquininhas', 'A Área das Maquininhas')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
                   title="Imprimir somente este capítulo"
                 >
@@ -597,96 +780,111 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('terminal_pos')}
                   className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Abrir no App</span>
+                  <span>Abrir Modo Maquininha</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              O BebêAqui possui tecnologia de <strong>sincronização ultra-rápida P2P</strong> para maquininhas Smart Android (como <strong>Ton T3 Smart</strong>, <strong>Stone P2 Touch</strong>, <strong>PagBank Smart</strong> ou celulares dos garçons). O garçom ou vendedor de pista registra as bebidas na tela da maquininha e os pedidos aparecem no computador do caixa em menos de <strong>10 milissegundos</strong>.
+              A <strong>Área das Maquininhas (Modo Smart POS)</strong> transforma terminais Android portáteis com bobina térmica integrada (como <strong>Ton T3 Smart</strong>, <strong>Stone P2 Touch</strong>, <strong>PagBank Smart</strong> ou celulares dos garçons) em pontos de venda móveis completos. Com tecnologia de <strong>sincronização instantânea P2P (&lt;10ms)</strong>, cada produto bipado na pista ou no galpão é atualizado no computador do caixa em frações de segundo.
             </p>
 
-            {/* Passo a Passo em 3 Etapas */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            {/* Passo a Passo Didático em 4 Etapas Principais */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center">
                   1
                 </div>
-                <h3 className="font-bold text-sm text-slate-900">Acesso na Maquininha</h3>
+                <h3 className="font-bold text-sm text-slate-900">Acesso & Atalho de Tela Cheia</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Na sua maquininha Ton ou Stone, abra o navegador de internet (Google Chrome) e acesse o endereço da sua loja:
+                  Na sua maquininha Ton ou Stone, abra o <strong>Google Chrome</strong> e digite o link do terminal. Toque nos 3 pontinhos do navegador e selecione <strong>"Adicionar à tela inicial"</strong>. O ícone oficial do BebêAqui é criado na tela da maquininha, funcionando como aplicativo nativo em tela inteira.
                 </p>
-                <div className="p-2.5 rounded-lg bg-white border border-slate-300 font-mono text-[11px] text-emerald-700 font-bold truncate">
+                <div className="p-2 bg-emerald-50 rounded-lg border border-emerald-200 font-mono text-[10px] text-emerald-800 font-bold truncate">
                   {window.location.origin}/?page=terminal_pos
                 </div>
-                <p className="text-[10px] text-slate-500">
-                  Dica: Toque nos três pontinhos do navegador e selecione <em>"Adicionar à tela inicial"</em> para criar o ícone como um aplicativo nativo.
-                </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center">
                   2
                 </div>
-                <h3 className="font-bold text-sm text-slate-900">Bipar com Câmera ou Tocar</h3>
+                <h3 className="font-bold text-sm text-slate-900">Identificação do Operador</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  O operador de pista pode simplesmente tocar na foto da cerveja/destilado na tela ou usar o botão <strong>"Bipar Câmera Traseira"</strong> para ler o código de barras das latinhas ou fardos diretamente no depósito.
+                  No topo da tela da maquininha, toque no seletor de operador para identificar quem está vendendo (ex: <em>Carlos - Garçom Pista</em>, <em>Marina - Balcão</em> ou <em>Vendedor Galpão</em>). Isso garante comissões certas e rastreabilidade total das vendas de cada membro da equipe.
                 </p>
-                <p className="text-[10px] text-slate-500">
-                  Compatível com leitura de EAN-13 em frações de segundo.
-                </p>
+                <div className="p-1.5 bg-slate-100 rounded-lg text-[10px] text-slate-600">
+                  ✔ Troca de operador com 1 toque sem fechar a conta.
+                </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center">
                   3
                 </div>
+                <h3 className="font-bold text-sm text-slate-900">Bipar com Câmera Traseira</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  O atendente pode simplesmente tocar na foto da cerveja no catálogo ou clicar no botão <strong>"Bipar Câmera Traseira"</strong>. Aponte a câmera da maquininha para o código de barras (EAN-13) da latinha, garrafa ou fardo para adicionar à venda em menos de 1 segundo.
+                </p>
+                <div className="p-1.5 bg-slate-100 rounded-lg text-[10px] text-slate-600">
+                  ✔ Leitura ultrarrápida no escuro ou ambientes claros.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center">
+                  4
+                </div>
                 <h3 className="font-bold text-sm text-slate-900">Cobrança & Cupom Térmico</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Ao clicar em <strong>"Cobrar na Maquininha"</strong>, selecione se o cliente vai pagar no Cartão (Aproximação/Chip) ou no <strong>PIX na Tela</strong>.
+                  Ao clicar em <strong>"Cobrar na Maquininha"</strong>, escolha se o cliente pagará no Cartão (Aproximação/NFC ou Chip) ou no <strong>PIX na Tela</strong>. A maquininha imprime automaticamente o comprovante fiscal/térmico pelo compartimento superior assim que a venda for aprovada.
                 </p>
-                <p className="text-[10px] text-slate-500">
-                  A maquininha imprime o comprovante térmico no topo automaticamente assim que a venda é aprovada.
-                </p>
+                <div className="p-1.5 bg-slate-100 rounded-lg text-[10px] text-slate-600">
+                  ✔ Impressão instantânea sem precisar de impressora externa.
+                </div>
               </div>
             </div>
 
-            {/* Destaque: Regra de Ouro do PIX Exclusivo por Perfil */}
+            {/* Destaque: Regra de Ouro do PIX Exclusivo por Perfil na Maquininha */}
             <div className="avoid-page-break p-4 bg-emerald-50 border-2 border-emerald-300 rounded-2xl space-y-3 text-xs text-slate-800">
               <div className="flex items-center gap-2 text-emerald-900 font-black text-sm">
                 <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-                <span>Regra de Ouro do PIX na Maquininha: Chave Única por Perfil</span>
+                <span>Recebimento PIX na Maquininha: Chave Exclusiva da Sua Distribuidora</span>
               </div>
               <p className="text-slate-700 leading-relaxed">
-                Quando o cliente da maquininha optar por pagar no <strong>PIX</strong>, o operador seleciona "PIX" ou clica no aviso <em>"💡 Cliente prefere pagar via PIX?"</em>. O sistema gera um <strong>QR Code oficial BACEN escaneável</strong> na própria tela da maquininha com o valor exato da conta.
+                Quando o cliente na pista ou na mesa optar por pagar via <strong>PIX</strong>, o operador seleciona a opção <strong>"PIX"</strong> na maquininha. O sistema gera automaticamente um <strong>QR Code oficial BACEN dinâmico</strong> na própria tela da máquina com o valor exato da conta.
               </p>
               <div className="p-3.5 bg-white rounded-xl border border-emerald-200 flex flex-wrap items-center justify-between gap-4 font-mono text-[11px]">
                 <div>
-                  <span className="text-slate-500 block text-[10px]">Perfil de Destino:</span>
+                  <span className="text-slate-500 block text-[10px]">Distribuidora Beneficiária:</span>
                   <strong className="text-slate-950 font-bold">{activeCompany.tradeName}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[10px]">Chave PIX Cadastrada:</span>
+                  <span className="text-slate-500 block text-[10px]">Chave PIX Validada:</span>
                   <strong className="text-emerald-700 font-bold">{activeCompany.bankDetails?.pixKey}</strong> ({activeCompany.bankDetails?.pixKeyType?.toUpperCase()})
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[10px]">Favorecido Oficial:</span>
+                  <span className="text-slate-500 block text-[10px]">Titular da Conta:</span>
                   <strong className="text-slate-950">{activeCompany.bankDetails?.beneficiaryName || activeCompany.tradeName}</strong>
                 </div>
               </div>
-              <p className="text-[11px] text-emerald-900 font-medium">
-                ✔ <strong>Zero Risco de Fraude:</strong> O dinheiro entra direto na conta bancária cadastrada na sua empresa, sem intermediários e com confirmação visual imediata na maquininha.
-              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-emerald-950">
+                <div className="p-2 bg-emerald-100/60 rounded-lg">
+                  ✔ <strong>Dinheiro 100% Direto:</strong> Não há intermediação financeira retendo seu capital de giro. O valor cai direto na sua conta bancária cadastrada.
+                </div>
+                <div className="p-2 bg-emerald-100/60 rounded-lg">
+                  ✔ <strong>Confirmação Visual Imediata:</strong> A tela da maquininha exibe o comprovante de aprovação e dispara a impressão térmica na hora.
+                </div>
+              </div>
             </div>
 
-            {/* Dica de Contingência (Queda de Internet) */}
+            {/* Dica de Contingência (Queda de Internet e Chip 4G) */}
             <div className="avoid-page-break p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs flex items-start gap-2.5">
               <Wifi className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-900 block font-bold">O que fazer se o Wi-Fi da loja oscilar ou cair?</strong>
-                <p className="text-slate-600 mt-0.5">
-                  As maquininhas Ton T3 e Stone contam com chip de dados 4G próprio incluso. Se a internet fixa cair, o operador continua vendendo e recebendo normalmente via 4G. Todos os pedidos são reconciliados automaticamente no servidor central.
+                <strong className="text-slate-900 block font-bold">O que fazer se a internet Wi-Fi da loja oscilar ou cair?</strong>
+                <p className="text-slate-600 mt-0.5 leading-relaxed">
+                  As maquininhas Smart (Ton T3 e Stone) vêm com <strong>chip de dados 4G próprio incluso</strong> que não consome dados do estabelecimento. Se a internet banda larga da sua distribuidora cair, a maquininha continua vendendo, emitindo QR Codes PIX e imprimindo cupom normalmente pela rede 4G. Quando a rede fixa reestabelece, os dados são sincronizados no computador central do caixa de forma 100% transparente.
                 </p>
               </div>
             </div>
@@ -694,7 +892,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 02: FAZER VENDAS NO BALCÃO (PDV CAIXA)                             */}
+        {/* MÓDULO 03: FAZER VENDAS NO BALCÃO (PDV CAIXA RÁPIDO)                      */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'vendas') && (
           <div id="sec-vendas" className="page-break-before space-y-5 pt-4">
@@ -704,9 +902,9 @@ export const GuideView: React.FC = () => {
                   <Store className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 02</span>
+                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 03</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Fazer Vendas no Balcão (PDV Caixa Rápido)
+                    PDV Vendas: Frente de Caixa Rápido & Atendimento de Balcão
                   </h2>
                 </div>
               </div>
@@ -714,8 +912,9 @@ export const GuideView: React.FC = () => {
               <div className="no-print flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => handlePrintSingleChapter('vendas', 'Fazer Vendas')}
+                  onClick={() => handlePrintSingleChapter('vendas', 'PDV Vendas')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -725,91 +924,146 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('pos')}
                   className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Abrir no App</span>
+                  <span>Abrir Frente de Caixa</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              O <strong>PDV Vendas</strong> foi projetado para operadores de caixa que precisam atender filas com extrema velocidade. Você pode efetuar vendas rápidas de balcão (sem mesa) ou selecionar uma mesa para comanda.
+              O <strong>PDV Vendas (Frente de Caixa)</strong> foi desenvolvido para atender picos de movimento com fila no balcão em alta velocidade. O operador pode finalizar vendas completas em menos de 10 segundos, aceitar pagamentos fracionados, emitir comprovantes e controlar o fluxo financeiro diário com precisão.
             </p>
+
+            {/* Ciclo Operacional do Caixa em 4 Etapas */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-600 text-white font-black flex items-center justify-center">
+                  1
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Abertura de Caixa (Suprimento)</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  No início do dia ou início de turno, o operador clica em <strong>"Abrir Caixa"</strong> e informa o valor do <strong>Fundo de Troco</strong> (ex: R$ 150,00 em moedas e notas miúdas). O sistema registra o saldo inicial de partida para a conferência no final do expediente.
+                </p>
+                <div className="p-1.5 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 font-medium">
+                  ✔ Gaveta inicial auditada e protegida.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-600 text-white font-black flex items-center justify-center">
+                  2
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Bipar ou Código Rápido</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Passe o leitor de código de barras USB nas latas ou digite o código de 2 dígitos do produto (ex: digite <em>01</em> para Heineken ou <em>02</em> para Amstel) e dê ENTER. A busca inteligente filtra por marca, volume ou categoria instantaneamente.
+                </p>
+                <div className="p-1.5 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 font-medium">
+                  ✔ Atendimento 3x mais rápido sem usar mouse.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-600 text-white font-black flex items-center justify-center">
+                  3
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Cobrança Rápida (F2)</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Pressione <strong>F2</strong> no teclado. Escolha a forma de pagamento: Dinheiro (com cálculo automático de troco em verde), PIX Dinâmico com QR Code na tela ou Cartão (Débito/Crédito). Finalize pressionando <strong>ENTER</strong>.
+                </p>
+                <div className="p-1.5 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 font-medium">
+                  ✔ Cupom gerado e estoque baixado na hora.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-600 text-white font-black flex items-center justify-center">
+                  4
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Sangria & Fechamento</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Para não acumular muito dinheiro em espécie na gaveta, use a opção <strong>"Sangria de Caixa"</strong> para recolher valores para o cofre. No fim do turno, clique em <strong>"Fechar Caixa"</strong>: o sistema realiza a conferência e imprime o resumo de fechamento.
+                </p>
+                <div className="p-1.5 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 font-medium">
+                  ✔ Sem furos de caixa ou divergências.
+                </div>
+              </div>
+            </div>
 
             {/* Tabela Oficial de Atalhos de Teclado */}
             <div className="avoid-page-break p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
               <h3 className="font-bold text-xs text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
                 <Zap className="w-4 h-4 text-amber-600" />
-                <span>Atalhos de Teclado Oficiais para o Operador de Caixa:</span>
+                <span>Atalhos de Teclado Oficiais para o Operador do Caixa:</span>
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
                 <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
                   <strong className="text-amber-600 text-base block font-black">F1</strong>
                   <span className="text-slate-800 font-bold block text-xs">Venda Balcão / Mesa</span>
-                  <span className="text-slate-500 text-[10px]">Alterna entre venda rápida e mapa de mesas.</span>
+                  <span className="text-slate-500 text-[10px]">Alterna entre venda rápida de balcão e mapa de mesas.</span>
                 </div>
                 <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
                   <strong className="text-emerald-600 text-base block font-black">F2</strong>
                   <span className="text-slate-800 font-bold block text-xs">Receber & Finalizar</span>
-                  <span className="text-slate-500 text-[10px]">Abre o modal de pagamento do caixa.</span>
+                  <span className="text-slate-500 text-[10px]">Abre o modal de pagamento do caixa com as opções.</span>
                 </div>
                 <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
                   <strong className="text-blue-600 text-base block font-black">ENTER</strong>
                   <span className="text-slate-800 font-bold block text-xs">Confirmar Pagamento</span>
-                  <span className="text-slate-500 text-[10px]">Valida o recebimento e conclui a venda.</span>
+                  <span className="text-slate-500 text-[10px]">Valida o recebimento e conclui a venda emitindo o cupom.</span>
                 </div>
                 <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
                   <strong className="text-rose-600 text-base block font-black">ESC</strong>
-                  <span className="text-slate-800 font-bold block text-xs">Voltar / Fechar</span>
-                  <span className="text-slate-500 text-[10px]">Cancela modais ou limpa a busca.</span>
+                  <span className="text-slate-800 font-bold block text-xs">Voltar / Cancelar</span>
+                  <span className="text-slate-500 text-[10px]">Fecha modais abertos ou limpa o campo de busca.</span>
                 </div>
               </div>
             </div>
 
-            {/* Formas de Pagamento e Troco */}
+            {/* Formas de Pagamento e Divisão */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                 <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-emerald-600" />
-                  <span>Dinheiro & Troco</span>
+                  <span>Dinheiro & Calculadora de Troco</span>
                 </h4>
                 <p className="text-slate-600 leading-relaxed">
-                  Digite o valor entregue pelo cliente ou clique nos botões rápidos de notas (R$ 10, R$ 20, R$ 50, R$ 100 ou Exato). O sistema exibe o <strong>Troco do Cliente</strong> em destaque verde.
+                  Digite o valor entregue pelo cliente ou clique nos botões rápidos de cédulas (R$ 10, R$ 20, R$ 50, R$ 100 ou Exato). O sistema calcula e destaca em verde exatamente o <strong>Troco do Cliente</strong>, evitando erros manuais de cálculo.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                 <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
                   <QrCode className="w-4 h-4 text-teal-600" />
-                  <span>PIX Dinâmico com QR Code</span>
+                  <span>PIX Dinâmico com QR Code BACEN</span>
                 </h4>
                 <p className="text-slate-600 leading-relaxed">
-                  Ao escolher PIX, a tela do caixa exibe o QR Code dinâmico do BACEN com o valor exato da compra. O operador pode virar o monitor para o cliente ler ou clicar em <strong>"Copiar Código PIX"</strong>.
+                  Ao escolher PIX, a tela exibe o QR Code dinâmico do BACEN com o valor exato da compra. O operador pode virar o monitor para o cliente escanear ou clicar em <strong>"Copiar Código PIX"</strong> para enviar pelo WhatsApp no caso de pedidos de delivery.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                 <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-blue-600" />
-                  <span>Cartão Débito & Crédito</span>
+                  <span>Cartões Débito, Crédito & Voucher</span>
                 </h4>
                 <p className="text-slate-600 leading-relaxed">
-                  Selecione Débito ou Crédito e efetue a cobrança na maquininha Ton / Stone conectada. O PDV grava o NSU e o comprovante da transação no relatório diário.
+                  Selecione a bandeira/modalidade e passe o cartão na maquininha Ton/Stone. O sistema permite registrar o código de autorização ou NSU para reconciliação automática no fechamento do dia.
                 </p>
               </div>
             </div>
 
-            {/* Pagamentos Parciais e Divisão */}
+            {/* Pagamentos Parciais e Divisão Múltipla */}
             <div className="avoid-page-break p-4 bg-blue-50 border border-blue-200 rounded-2xl text-xs space-y-1.5">
               <strong className="text-blue-950 font-bold block text-sm">Como Dividir o Pagamento em Múltiplas Formas:</strong>
               <p className="text-blue-900 leading-relaxed">
-                Se o cliente desejar pagar R$ 30,00 em dinheiro e o restante no PIX ou Cartão, clique no botão <strong>"+ Registrar Pagamento Parcial"</strong> no modal de recebimento. O caixa abate o saldo recebido, atualiza o saldo restante em tempo real e permite liquidar o restante com outra modalidade.
+                Se o cliente desejar pagar R$ 30,00 em dinheiro e os outros R$ 45,00 no PIX ou Cartão, clique no botão <strong>"+ Registrar Pagamento Parcial"</strong> no modal de recebimento. O caixa abate o valor recebido, calcula o saldo restante em tempo real e permite liquidar o restante com outra modalidade, emitindo um cupom consolidado com ambas as baixas.
               </p>
             </div>
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 03: GESTÃO DE MESAS E COMANDAS                                     */}
+        {/* MÓDULO 04: GESTÃO DE MESAS, DECK, SALÃO E COMANDAS                        */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'mesas') && (
           <div id="sec-mesas" className="page-break-before space-y-5 pt-4">
@@ -819,9 +1073,9 @@ export const GuideView: React.FC = () => {
                   <UtensilsCrossed className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-blue-700 uppercase tracking-wider">Módulo 03</span>
+                  <span className="text-[11px] font-bold text-blue-700 uppercase tracking-wider">Módulo 04</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Fazer a Gestão de Mesas, Deck e Comandas
+                    Gestão de Mesas, Deck, Salão e Comandas
                   </h2>
                 </div>
               </div>
@@ -831,6 +1085,7 @@ export const GuideView: React.FC = () => {
                   type="button"
                   onClick={() => handlePrintSingleChapter('mesas', 'Gestão de Mesas')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -840,67 +1095,82 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('tables')}
                   className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Abrir no App</span>
+                  <span>Abrir Mapa de Mesas</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              O módulo de <strong>Gestão de Mesas</strong> monitora o salão, deck e pista em tempo real. Cada mesa possui indicadores visuais de cor para saber na hora o estado de atendimento do cliente.
+              O módulo de <strong>Gestão de Mesas</strong> monitora o salão, o deck externo, a área VIP e as banquetas do balcão em tempo real. Cada mesa possui indicadores visuais de cor para que os garçons e o caixa saibam instantaneamente o estado exato de cada cliente no estabelecimento.
             </p>
 
-            {/* Indicadores Visuais de Cores */}
+            {/* 4 Status Visuais por Cores */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300">
                 <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-black text-[10px] uppercase">
                   Livre (Verde)
                 </span>
-                <p className="text-slate-600 mt-1.5 text-[11px]">Mesa desocupada e pronta para receber novos clientes.</p>
+                <p className="text-slate-700 mt-1.5 text-[11px] leading-relaxed">
+                  Mesa desocupada e pronta para receber novos clientes. O QR Code da mesa está ativo aguardando abertura de comanda.
+                </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-300">
                 <span className="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black text-[10px] uppercase">
                   Ocupada (Amarela)
                 </span>
-                <p className="text-slate-600 mt-1.5 text-[11px]">Comanda aberta com bebidas lançadas consumindo.</p>
+                <p className="text-slate-700 mt-1.5 text-[11px] leading-relaxed">
+                  Clientes sentados com comanda aberta consumindo. Itens lançados pelo garçom na maquininha ou pelo autoatendimento.
+                </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-purple-50 border border-purple-200">
+              <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-300">
                 <span className="px-2 py-0.5 rounded-full bg-purple-200 text-purple-950 font-black text-[10px] uppercase">
                   Pediu Conta (Roxo)
                 </span>
-                <p className="text-slate-600 mt-1.5 text-[11px]">Cliente solicitou o encerramento da comanda.</p>
+                <p className="text-slate-700 mt-1.5 text-[11px] leading-relaxed">
+                  O cliente solicitou a pré-conta no celular ou chamou o garçom. O caixa já visualiza o extrato pronto para cobrança.
+                </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-blue-50 border border-blue-200">
+              <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-300">
                 <span className="px-2 py-0.5 rounded-full bg-blue-200 text-blue-950 font-black text-[10px] uppercase">
                   Fechando (Azul)
                 </span>
-                <p className="text-slate-600 mt-1.5 text-[11px]">Pagamento sendo processado no balcão ou maquininha.</p>
+                <p className="text-slate-700 mt-1.5 text-[11px] leading-relaxed">
+                  Pagamento sendo processado no balcão ou na maquininha móvel Ton/Stone. Bloqueia novos pedidos até a liberação final.
+                </p>
               </div>
             </div>
 
-            {/* Operação Prática das Mesas */}
+            {/* Operação Prática das Mesas em 4 Pilares */}
             <div className="space-y-3 text-xs text-slate-700">
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <strong className="text-slate-900 text-sm block font-bold">1. Como Lançar Bebidas na Mesa:</strong>
                 <p className="leading-relaxed">
-                  No PDV Vendas, clique no seletor de <strong>"Mesa"</strong> ou pressione F1. Escolha a mesa desejada no mapa. A partir desse momento, todos os itens adicionados ao carrinho serão gravados diretamente na comanda da mesa ao clicar em <strong>"Lançar Pedido na Mesa (F2)"</strong>.
+                  No PDV Vendas, clique no seletor de <strong>"Mesa"</strong> ou pressione F1. Escolha a mesa desejada no mapa visual. Adicione as bebidas ao carrinho e clique em <strong>"Lançar Pedido na Mesa (F2)"</strong>. O pedido é computado instantaneamente na comanda da mesa e sincronizado em todas as maquininhas da equipe.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <strong className="text-slate-900 text-sm block font-bold">2. Adicionar, Renomear e Editar Mesas:</strong>
+                <strong className="text-slate-900 text-sm block font-bold">2. Adicionar, Renomear e Customizar Mesas:</strong>
                 <p className="leading-relaxed">
-                  No painel de Mesas, clique no botão <strong>"+ Adicionar Mesa"</strong> para criar novas mesas. No card de qualquer mesa existente, clique no ícone de lápis para alterar o número, capacidade de assentos ou apelido (ex: <em>"Deck 01"</em>, <em>"Área VIP 04"</em>, <em>"Banqueta Balcão"</em>).
+                  No painel de Mesas, clique no botão <strong>"+ Adicionar Mesa"</strong> para criar novas mesas conforme seu salão cresce. Em qualquer mesa existente, clique no ícone de lápis para ajustar o número, capacidade de assentos (ex: 4 cadeiras, 8 cadeiras) ou apelido do ambiente (ex: <em>"Deck 01"</em>, <em>"Varanda 03"</em>, <em>"Camarote VIP"</em> ou <em>"Banqueta Balcão"</em>).
                 </p>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <strong className="text-slate-900 text-sm block font-bold">3. Fechar Conta & Taxa de Serviço:</strong>
+                <strong className="text-slate-900 text-sm block font-bold">3. Transferência de Itens & Junção de Mesas:</strong>
                 <p className="leading-relaxed">
-                  Clique em <strong>"Fechar Conta"</strong>. O sistema calcula o subtotal, permite incluir taxa de serviço de 10% (opcional e desativável com um clique) e concede descontos. Ao escolher PIX, a tela exibe o QR Code oficial da comanda para pagamento imediato. Assim que confirmado, a mesa é liberada automaticamente.
+                  Quando clientes mudam de mesa ou juntam dois grupos em uma mesa maior, abra a mesa de origem, selecione a opção <strong>"Transferir Itens"</strong> e aponte para a mesa de destino. O saldo e histórico são transferidos sem duplicidades nem perdas de lançamento.
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <strong className="text-slate-900 text-sm block font-bold">4. Fechamento de Conta, Divisão por Amigos & 10% Opcional:</strong>
+                <p className="leading-relaxed">
+                  Clique em <strong>"Fechar Conta"</strong>. O sistema detalha os produtos consumidos, permite ativar ou desativar a taxa de serviço (10% sugerida) com um toque e calcula a divisão do valor pelo número de pessoas na mesa (ex: Total R$ 180 / 4 pessoas = R$ 45,00 cada). Ao escolher PIX, a tela gera o QR Code oficial da comanda. Ao confirmar, a mesa retorna instantaneamente ao status <strong>Livre (Verde)</strong>.
                 </p>
               </div>
             </div>
@@ -908,7 +1178,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 04: CARDÁPIO DIGITAL QR CODE                                      */}
+        {/* MÓDULO 05: CARDÁPIO DIGITAL QR CODE (AUTOATENDIMENTO)                     */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'cardapio') && (
           <div id="sec-cardapio" className="page-break-before space-y-5 pt-4">
@@ -918,9 +1188,9 @@ export const GuideView: React.FC = () => {
                   <QrCode className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">Módulo 04</span>
+                  <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">Módulo 05</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Cardápio Digital QR Code (Autoatendimento)
+                    Cardápio Digital QR Code: Autoatendimento na Mesa sem Baixar Aplicativo
                   </h2>
                 </div>
               </div>
@@ -930,6 +1200,7 @@ export const GuideView: React.FC = () => {
                   type="button"
                   onClick={() => handlePrintSingleChapter('cardapio', 'Cardápio Digital')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -939,54 +1210,181 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('menu')}
                   className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Ver Cardápio</span>
+                  <span>Ver Cardápio Digital</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              Elimine cardápios físicos de papel e filas no caixa. O cliente aponta a câmera do celular para a plaquinha com QR Code na mesa e tem acesso imediato a todas as bebidas geladas com fotos de alta qualidade, preços atualizados e descrições.
+              O <strong>Cardápio Digital QR Code</strong> moderniza o salão e elimina o custo com cardápios físicos de papel que se desgastam ou ficam com preços desatualizados. O cliente aponta a câmera nativa do seu smartphone (iPhone ou Android) para a plaquinha da mesa e pede suas bebidas com rapidez, conforto e total autonomia.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
-                <h3 className="font-bold text-purple-950 text-sm">Sem Necessidade de App</h3>
+                <h3 className="font-bold text-purple-950 text-sm flex items-center gap-1.5">
+                  <Smartphone className="w-4 h-4 text-purple-700" />
+                  <span>100% Web: Sem Baixar App</span>
+                </h3>
                 <p className="text-purple-900 leading-relaxed">
-                  O cliente não precisa baixar nada na App Store ou Google Play. O cardápio abre instantaneamente no navegador móvel (Chrome/Safari) via tecnologia Web leve.
+                  O cliente não precisa baixar nada na Google Play ou App Store nem fazer cadastros longos. O cardápio abre em menos de 1 segundo no navegador móvel com interface ultra-leve e fluida.
                 </p>
+                <div className="p-1.5 bg-white/80 rounded-lg text-[10px] text-purple-950 font-medium">
+                  ✔ Zero atrito para o cliente começar a consumir.
+                </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
-                <h3 className="font-bold text-purple-950 text-sm">Identificação da Mesa</h3>
+                <h3 className="font-bold text-purple-950 text-sm flex items-center gap-1.5">
+                  <QrCode className="w-4 h-4 text-purple-700" />
+                  <span>Identificação da Mesa</span>
+                </h3>
                 <p className="text-purple-900 leading-relaxed">
-                  Cada QR Code carrega a identificação única da mesa do cliente. Ao finalizar o pedido, o bar ou cozinha sabe exatamente onde fazer a entrega da bebida.
+                  Cada plaquinha QR Code possui a chave da respectiva mesa gravada no link. Ao enviar a sacola, o pedido é endereçado automaticamente para a comanda daquela mesa (ex: <em>Mesa 05 - Deck</em>).
                 </p>
+                <div className="p-1.5 bg-white/80 rounded-lg text-[10px] text-purple-950 font-medium">
+                  ✔ Entrega precisa e sem troca de comandas.
+                </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
-                <h3 className="font-bold text-purple-950 text-sm">Impressão em Lote (A4)</h3>
+                <h3 className="font-bold text-purple-950 text-sm flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-purple-700" />
+                  <span>Alerta Sonoro no Bar</span>
+                </h3>
                 <p className="text-purple-900 leading-relaxed">
-                  No painel de Mesas, clique em <strong>"Gerenciar Placas QR Code"</strong>. O sistema gera uma folha A4 com todas as plaquinhas diagramadas prontas para imprimir e plastificar.
+                  Assim que o cliente toca em "Enviar Pedido", o painel do bar e do caixa emite um sinal sonoro claro e exibe o pop-up com as bebidas solicitadas para o garçom apenas retirar na geladeira e levar.
                 </p>
+                <div className="p-1.5 bg-white/80 rounded-lg text-[10px] text-purple-950 font-medium">
+                  ✔ Agilidade recorde no atendimento.
+                </div>
               </div>
             </div>
 
-            {/* Fluxo do Pedido pelo Cardápio */}
-            <div className="avoid-page-break p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-xs">
-              <h4 className="font-bold text-slate-900 text-sm">Como Funciona o Ciclo do Autoatendimento:</h4>
-              <ol className="list-decimal list-inside space-y-1.5 text-slate-700 leading-relaxed">
-                <li>O cliente senta na mesa e escaneia a plaquinha com a câmera do smartphone.</li>
-                <li>Ele navega pelas categorias (Cervejas, Destilados, Sem Álcool) e adiciona itens à sacola.</li>
-                <li>Ele clica em <strong>"Enviar Pedido"</strong>. O sistema emite um alerta sonoro no painel do bar e insere os produtos diretamente na comanda da mesa.</li>
-                <li>O garçom entrega a bebida na mesa sem atritos de fila.</li>
+            {/* Ciclo Prático do Autoatendimento */}
+            <div className="avoid-page-break p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
+              <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Passo a Passo da Jornada do Cliente no Salão:</span>
+              </h4>
+              <ol className="list-decimal list-inside space-y-2 text-slate-700 leading-relaxed">
+                <li>
+                  <strong>Leitura do QR Code:</strong> O cliente senta na mesa e aponta a câmera do smartphone para o display acrílico.
+                </li>
+                <li>
+                  <strong>Navegação Visual:</strong> Ele visualiza as fotos em alta definição, preços de doses, garrafas e combos promocionais divididos por categorias (Cervejas, Destilados, Sucos, Gelo).
+                </li>
+                <li>
+                  <strong>Montagem da Sacola:</strong> O cliente seleciona as bebidas, ajusta as quantidades desejadas e confere o subtotal.
+                </li>
+                <li>
+                  <strong>Envio Imediato:</strong> Ao clicar em <strong>"Enviar Pedido para a Mesa"</strong>, o pedido entra na comanda ativa e o bar é alertado na hora para servir as bebidas geladas.
+                </li>
               </ol>
             </div>
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 05: PRODUTOS E CATEGORIAS                                         */}
+        {/* MÓDULO 06: EDIÇÃO & CUSTOMIZAÇÃO DO CARDÁPIO DIGITAL                      */}
+        {/* ========================================================================= */}
+        {(printFilter === 'all' || printFilter === 'edicao_cardapio') && (
+          <div id="sec-edicao_cardapio" className="page-break-before space-y-5 pt-4">
+            <div className="flex items-start justify-between gap-4 border-b-2 border-amber-500 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Palette className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 06</span>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+                    Edição & Customização do Cardápio Digital Oficial
+                  </h2>
+                </div>
+              </div>
+
+              <div className="no-print flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handlePrintSingleChapter('edicao_cardapio', 'Edição do Cardápio')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Imprimir Módulo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePage('settings')}
+                  className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
+                >
+                  <span>Configurações & Visual</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-700 leading-relaxed">
+              O Cardápio Digital é o cartão de visitas da sua distribuidora. Você pode personalizar 100% da identidade da sua marca, definir fotos de capa temáticas em alta definição, inserir o logotipo da loja, horários de atendimento, parâmetros de delivery e gerar as folhas com plaquinhas QR Code para impressão gráfica em tamanho A4.
+            </p>
+
+            {/* 3 Pilares de Customização Didáticos */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center">
+                  1
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Foto de Capa & Logotipo da Loja</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  No menu <strong>"Configurações da Empresa"</strong> ou direto no cabeçalho do Cardápio Digital, clique em <strong>"Trocar Foto de Capa"</strong>. Selecione um banner de alta definição da vitrine ou informe uma imagem real da sua fachada. Faça upload do seu logo para criar autoridade de marca diante dos clientes.
+                </p>
+                <div className="p-1.5 bg-white rounded-lg text-[10px] text-amber-950 font-medium border border-amber-200">
+                  ✔ Visual premium que estimula pedidos de maior valor.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center">
+                  2
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Horários, Delivery & WhatsApp</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Informe o horário de expediente (ex: Seg a Dom das 10h às 02h) e o número do WhatsApp com link automático de conversa. Configure a <strong>Taxa de Entrega padrão</strong> (ex: R$ 10,00), o valor do <strong>Pedido Mínimo</strong> (ex: R$ 30,00) e a estimativa de tempo (ex: 30 a 45 min).
+                </p>
+                <div className="p-1.5 bg-white rounded-lg text-[10px] text-amber-950 font-medium border border-amber-200">
+                  ✔ Pedidos de tele-entrega recebidos sem intermediários.
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center">
+                  3
+                </div>
+                <h3 className="font-bold text-sm text-slate-900">Impressão de Plaquinhas A4 em Lote</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  No menu <strong>"Gestão de Mesas"</strong>, clique em <strong>"Gerenciar Placas QR Code"</strong>. O sistema monta uma folha A4 diagramada com todos os códigos individuais das mesas e do balcão já com a moldura e instrução de leitura, pronta para imprimir em papel sulfite/couchê e plastificar em displays acrílicos.
+                </p>
+                <div className="p-1.5 bg-white rounded-lg text-[10px] text-amber-950 font-medium border border-amber-200">
+                  ✔ Economia de centenas de reais em gráficas externas.
+                </div>
+              </div>
+            </div>
+
+            {/* Destaque Legal e Prático */}
+            <div className="avoid-page-break p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-xs">
+              <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Classificação Indicativa & Destaque de Produtos Campeões:</span>
+              </h4>
+              <p className="text-slate-600 leading-relaxed">
+                O sistema insere automaticamente o selo oficial <strong>"+18"</strong> nas bebidas alcoólicas cadastradas, atendendo à legislação brasileira. Você pode organizar as categorias no menu (ex: Cervejas Geladas no topo, seguido de Destilados, Refrigerantes e Gelo) para priorizar os produtos de maior margem e saída.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* MÓDULO 07: PRODUTOS, CATEGORIAS & MARGEM DE LUCRO                         */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'produtos') && (
           <div id="sec-produtos" className="page-break-before space-y-5 pt-4">
@@ -996,9 +1394,9 @@ export const GuideView: React.FC = () => {
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-teal-700 uppercase tracking-wider">Módulo 05</span>
+                  <span className="text-[11px] font-bold text-teal-700 uppercase tracking-wider">Módulo 07</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Produtos, Categorias & Margem de Lucro
+                    Produtos, Categorias & Margem de Lucro em Tempo Real
                   </h2>
                 </div>
               </div>
@@ -1008,6 +1406,7 @@ export const GuideView: React.FC = () => {
                   type="button"
                   onClick={() => handlePrintSingleChapter('produtos', 'Produtos e Categorias')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -1017,45 +1416,66 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('products')}
                   className="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Gerenciar Produtos</span>
+                  <span>Gerenciar Catálogo</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              Mantenha o catálogo de bebidas da sua distribuidora sempre em dia. O cadastro inteligente calcula a margem bruta de cada item e avisa automaticamente quando o estoque mínimo for atingido.
+              Mantenha o catálogo de bebidas da sua distribuidora sempre atualizado. O cadastro inteligente calcula a margem bruta de cada item, avisa automaticamente quando o estoque mínimo de segurança for atingido e sincroniza os preços instantaneamente com o balcão, as maquininhas e o cardápio digital.
             </p>
 
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 text-xs">
-              <h3 className="font-bold text-slate-900 text-sm">Passo a Passo para Cadastrar um Novo Produto:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                  <strong className="text-slate-900 block font-bold">1. Dados Básicos & Volume:</strong>
-                  <p className="text-slate-600">
-                    Acesse <strong>"Produtos & Categorias"</strong> &gt; <strong>"+ Cadastrar Produto"</strong>. Digite o nome (ex: <em>"Heineken 600ml"</em>) e escolha a categoria (Cervejas, Destilados, Sucos, Gelo).
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-teal-600 text-white font-black flex items-center justify-center">
+                  1
                 </div>
-
-                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                  <strong className="text-slate-900 block font-bold">2. Preço de Custo x Venda:</strong>
-                  <p className="text-slate-600">
-                    Informe quanto você paga para a cervejaria (Preço de Custo) e por quanto vende no balcão. O sistema calcula a sua <strong>Margem de Lucro (%)</strong> na hora.
-                  </p>
+                <strong className="text-slate-900 block font-bold text-sm">Dados Básicos & Volume</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Acesse <strong>"Produtos & Categorias"</strong> &gt; <strong>"+ Cadastrar Produto"</strong>. Digite o nome (ex: <em>"Heineken 600ml"</em>) e vincule à categoria (Cervejas, Destilados, Vinhos, Sucos, Gelo).
+                </p>
+                <div className="p-1 bg-white rounded text-[10px] text-teal-800 font-medium">
+                  Volume: 350ml, 600ml, Litro ou Fardo.
                 </div>
+              </div>
 
-                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                  <strong className="text-slate-900 block font-bold">3. Código de Barras & Código Rápido:</strong>
-                  <p className="text-slate-600">
-                    Cadastre o código de barras original (EAN-13) ou um código rápido de 2 dígitos (ex: "01", "02") para o operador digitar no caixa em segundos.
-                  </p>
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-teal-600 text-white font-black flex items-center justify-center">
+                  2
                 </div>
+                <strong className="text-slate-900 block font-bold text-sm">Preço de Custo x Venda</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Informe o custo de aquisição da cervejaria e o preço de venda no balcão. O sistema calcula a sua <strong>Margem de Lucro (%)</strong> e o ganho em reais por garrafa na mesma hora.
+                </p>
+                <div className="p-1 bg-white rounded text-[10px] text-teal-800 font-medium">
+                  Controle exato da lucratividade do item.
+                </div>
+              </div>
 
-                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                  <strong className="text-slate-900 block font-bold">4. Alerta de Estoque Mínimo:</strong>
-                  <p className="text-slate-600">
-                    Defina o estoque de segurança (ex: 24 garrafas). Quando o estoque chegar nesse número, o sistema acende o alerta vermelho no painel de compras.
-                  </p>
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-teal-600 text-white font-black flex items-center justify-center">
+                  3
+                </div>
+                <strong className="text-slate-900 block font-bold text-sm">Código de Barras & 2 Dígitos</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Cadastre o código EAN-13 original para bipar com leitor ou defina um código rápido de 2 dígitos (ex: "01", "02"). O operador digita "01" + ENTER e a venda é lançada em segundos.
+                </p>
+                <div className="p-1 bg-white rounded text-[10px] text-teal-800 font-medium">
+                  Agilidade máxima no horário de pico.
+                </div>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <div className="w-7 h-7 rounded-lg bg-teal-600 text-white font-black flex items-center justify-center">
+                  4
+                </div>
+                <strong className="text-slate-900 block font-bold text-sm">Alerta de Estoque Mínimo</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Defina o limite de segurança (ex: 24 unidades). Quando o estoque atingir essa quantidade, o sistema acende um alerta visual amarelo/vermelho indicando a hora exata de pedir mais ao fornecedor.
+                </p>
+                <div className="p-1 bg-white rounded text-[10px] text-teal-800 font-medium">
+                  Evite a falta de cerveja gelada no fim de semana.
                 </div>
               </div>
             </div>
@@ -1063,7 +1483,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 06: ESTOQUE E ATACADO (B2B)                                       */}
+        {/* MÓDULO 08: ESTOQUE DE VAREJO & MÓDULO ATACADO (B2B)                       */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'estoque_atacado') && (
           <div id="sec-estoque_atacado" className="page-break-before space-y-5 pt-4">
@@ -1073,9 +1493,9 @@ export const GuideView: React.FC = () => {
                   <Boxes className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-rose-700 uppercase tracking-wider">Módulo 06</span>
+                  <span className="text-[11px] font-bold text-rose-700 uppercase tracking-wider">Módulo 08</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Controle de Estoque & Módulo Atacado (B2B)
+                    Estoque de Varejo & Módulo de Vendas no Atacado (B2B)
                   </h2>
                 </div>
               </div>
@@ -1085,6 +1505,7 @@ export const GuideView: React.FC = () => {
                   type="button"
                   onClick={() => handlePrintSingleChapter('estoque_atacado', 'Estoque e Atacado')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -1094,40 +1515,56 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('stock')}
                   className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Acessar Estoque</span>
+                  <span>Acessar Estoque & Atacado</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              Para quem vende tanto no varejo quanto em grande volume para outros estabelecimentos, o BebêAqui integra o <strong>Estoque do Galpão</strong> com o <strong>Módulo de Atacado B2B</strong>.
+              O BebêAqui unifica a operação para distribuidoras que vendem bebidas avulsas no balcão e volumes pesados no atacado para outros negócios. O módulo integra o <strong>Estoque do Galpão</strong> com o <strong>Módulo Atacado B2B</strong>, evitando divergências entre o estoque de loja e o depósito central.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
-                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              {/* Varejo & Galpão */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-rose-600" />
-                  <span>Gestão de Estoque do Galpão</span>
+                  <span>Gestão do Estoque do Galpão (Varejo & Depósito)</span>
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Controle caixas fechadas, paletes e unidades soltas. Toda vez que uma carga chegar dos fornecedores, clique em <strong>"+ Entrada de Mercadoria"</strong>. Todas as entradas e saídas por quebra/avaria são registradas com data, hora e responsável.
+                  Controle saldos em unidades individuais, caixas fechadas e fardos. Sempre que o caminhão da fábrica descarregar, clique em <strong>"+ Entrada de Mercadoria"</strong> para alimentar os saldos.
                 </p>
-                <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-700">
-                  <strong>Auditoria Completa:</strong> Evite desvios no depósito com relatórios de saldo físico vs fiscal.
+                <div className="space-y-1.5 text-slate-700">
+                  <div className="p-2 bg-white rounded-xl border border-slate-200">
+                    <strong className="block text-slate-900">Registro de Avarias & Perdas:</strong>
+                    <span>Quebrou garrafa ou estufou lata? Registre a baixa indicando o motivo e o operador para manter a auditoria limpa.</span>
+                  </div>
+                  <div className="p-2 bg-white rounded-xl border border-slate-200">
+                    <strong className="block text-slate-900">Auditoria Física vs Sistema:</strong>
+                    <span>Compare a contagem física das prateleiras com o saldo registrado no BebêAqui para evitar desvios no depósito.</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
-                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              {/* Atacado B2B */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-purple-600" />
-                  <span>Vendas no Atacado B2B</span>
+                  <span>Vendas no Atacado B2B (Grandes Volumes)</span>
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Cadastre clientes pessoa jurídica (bares, restaurantes, casas noturnas, eventos e buffets). Lance pedidos no atacado com tabela de preços por fardo e emita faturas com prazos flexíveis (À vista, 7 dias, 14 dias ou 28 dias).
+                  Cadastre clientes corporativos (bares parceiros, restaurantes, organizadores de eventos, casas noturnas e buffets). Lance pedidos de fardos e paletes com tabela de preços diferenciada para atacado.
                 </p>
-                <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-700">
-                  <strong>Fluxo do Pedido:</strong> Pendente &rarr; Confirmado &rarr; Separação &rarr; Rota &rarr; Entregue.
+                <div className="space-y-1.5 text-slate-700">
+                  <div className="p-2 bg-white rounded-xl border border-slate-200">
+                    <strong className="block text-slate-900">Faturamento & Prazos Flexíveis:</strong>
+                    <span>Configure condições de pagamento adequadas para cada parceiro: À vista, 7 dias, 14 dias ou 28 dias faturado.</span>
+                  </div>
+                  <div className="p-2 bg-white rounded-xl border border-slate-200">
+                    <strong className="block text-slate-900">Rastreamento do Fluxo do Pedido:</strong>
+                    <span>Acompanhe as fases em tempo real: Pendente &rarr; Confirmado &rarr; Separação &rarr; Rota de Entrega &rarr; Entregue.</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1135,7 +1572,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 07: EXTRATO DOS MESES PASSADOS & FINANCEIRO                       */}
+        {/* MÓDULO 09: EXTRATO DOS MESES PASSADOS & FINANCEIRO                       */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'extrato') && (
           <div id="sec-extrato" className="page-break-before space-y-5 pt-4">
@@ -1145,9 +1582,9 @@ export const GuideView: React.FC = () => {
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 07</span>
+                  <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Módulo 09</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Extrato dos Meses Passados & Relatórios Financeiros
+                    Extrato dos Meses Passados & Relatórios Financeiros Consolidados
                   </h2>
                 </div>
               </div>
@@ -1157,6 +1594,7 @@ export const GuideView: React.FC = () => {
                   type="button"
                   onClick={() => handlePrintSingleChapter('extrato', 'Extrato dos Meses Passados')}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-300"
+                  title="Imprimir somente este capítulo"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Imprimir Módulo</span>
@@ -1166,48 +1604,51 @@ export const GuideView: React.FC = () => {
                   onClick={() => setActivePage('statement')}
                   className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow"
                 >
-                  <span>Abrir Extrato</span>
+                  <span>Abrir Extrato Retroativo</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed">
-              O módulo de <strong>Extrato Consolidado</strong> apresenta o histórico financeiro retroativo da sua empresa mês a mês, permitindo avaliar a rentabilidade real, evolução de vendas e exportar os dados contábeis.
+              O módulo de <strong>Extrato Consolidado</strong> apresenta o histórico financeiro retroativo da sua distribuidora mês a mês. Você pode voltar em qualquer mês do ano para avaliar o crescimento real das vendas, margem de lucratividade, despesas operacionais e exportar planilhas para a contabilidade com total transparência.
             </p>
 
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 text-xs">
-              <h3 className="font-bold text-slate-900 text-sm">Principais Indicadores Financeiros Disponíveis:</h3>
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-amber-600" />
+                <span>Os 4 Grandes Indicadores Financeiros do Extrato Mensal:</span>
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-700">
                 <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-slate-900 block font-bold">Faturamento Bruto:</strong>
-                    <span>Total arrecadado em dinheiro, cartões de crédito/débito e PIX no mês selecionado.</span>
+                    <strong className="text-slate-900 block font-bold">1. Faturamento Bruto por Meio de Pagamento:</strong>
+                    <span className="text-slate-600">Total arrecadado no mês com separação transparente: quanto entrou via PIX, quanto em Cartão de Débito, Cartão de Crédito e Dinheiro em espécie na gaveta.</span>
                   </div>
                 </div>
 
                 <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-slate-900 block font-bold">CMV (Custo das Mercadorias):</strong>
-                    <span>O valor pago pelas bebidas aos fornecedores e cervejarias para gerar aquele faturamento.</span>
+                    <strong className="text-slate-900 block font-bold">2. CMV (Custo das Mercadorias Vendidas):</strong>
+                    <span className="text-slate-600">O valor exato pago pelas bebidas aos fornecedores e cervejarias para gerar aquele faturamento, demonstrando seu custo direto de produtos.</span>
                   </div>
                 </div>
 
                 <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-slate-900 block font-bold">Lucro Líquido Real:</strong>
-                    <span>O resultado financeiro limpo após descontar custos de bebidas e despesas operacionais.</span>
+                    <strong className="text-slate-900 block font-bold">3. Lucro Líquido Real & Margem Efetiva:</strong>
+                    <span className="text-slate-600">O resultado financeiro limpo após descontar custos de bebidas e despesas operacionais da distribuidora (aluguel, energia e equipe).</span>
                   </div>
                 </div>
 
                 <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                   <FileSpreadsheet className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-slate-900 block font-bold">Exportação CSV / Excel:</strong>
-                    <span>Gere arquivos estruturados com um clique para enviar diretamente ao seu contador.</span>
+                    <strong className="text-slate-900 block font-bold">4. Exportação CSV & Excel para Contador:</strong>
+                    <span className="text-slate-600">Gere arquivos compatíveis com Excel e sistemas contábeis com um clique para envio de impostos, balanço fiscal e escrituração.</span>
                   </div>
                 </div>
               </div>
@@ -1216,7 +1657,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 08: GUIA DE BOLSO / COLA RÁPIDA DO CAIXA                           */}
+        {/* MÓDULO 10: GUIA DE BOLSO / COLA RÁPIDA DO CAIXA                           */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'cola_caixa') && (
           <div id="sec-cola_caixa" className="page-break-before space-y-5 pt-4">
@@ -1226,7 +1667,7 @@ export const GuideView: React.FC = () => {
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider">Módulo 08</span>
+                  <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider">Módulo 10</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
                     Guia de Bolso: Cola Rápida para o Operador de Caixa
                   </h2>
@@ -1283,7 +1724,7 @@ export const GuideView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* MÓDULO 09: PERGUNTAS FREQUENTES (FAQ)                                     */}
+        {/* MÓDULO 11: PERGUNTAS FREQUENTES (FAQ)                                     */}
         {/* ========================================================================= */}
         {(printFilter === 'all' || printFilter === 'faq') && (
           <div id="sec-faq" className="page-break-before space-y-5 pt-4">
@@ -1293,9 +1734,9 @@ export const GuideView: React.FC = () => {
                   <HelpCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Módulo 09</span>
+                  <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Módulo 11</span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Perguntas Frequentes (FAQ) & Dicas de Ouro
+                    Perguntas Frequentes (FAQ) & Procedimentos Operacionais
                   </h2>
                 </div>
               </div>
@@ -1312,12 +1753,40 @@ export const GuideView: React.FC = () => {
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <strong className="text-slate-900 text-sm block font-bold">2. Como garanto que o PIX caia na conta correta?</strong>
                 <p className="text-slate-600 leading-relaxed">
-                  Acesse <strong>"Configurações & PIX"</strong>. Cadastre a chave PIX da sua distribuidora (CNPJ, Celular, E-mail ou Aleatória). O sistema valida a chave e garante que todos os QR Codes emitidos no PDV, nas Mesas e nas Maquininhas caiam exclusivamente na sua conta.
+                  Acesse <strong>"Configurações & PIX"</strong>. Cadastre a chave PIX da sua distribuidora (CPF, Celular, CNPJ, E-mail ou Aleatória). O sistema valida a chave e garante que todos os QR Codes emitidos no PDV, nas Mesas e nas Maquininhas caiam exclusivamente na sua conta.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <strong className="text-slate-900 text-sm block font-bold">3. Como limitar o acesso de operadores para não verem o lucro?</strong>
+                <strong className="text-slate-900 text-sm block font-bold">3. Não tenho CNPJ. Posso me cadastrar e usar o sistema com CPF?</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Com certeza! O BebêAqui possui a opção <strong>"Cadastro por CPF"</strong> logo no início. Pequenas adegas, depósitos familiares e distribuidores autônomos têm acesso completo a todos os módulos (PDV, mesas, comandas, estoque, cardápio digital e relatórios) com os mesmos recursos de quem tem CNPJ.
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <strong className="text-slate-900 text-sm block font-bold">4. A Chave PIX única também funciona no Modo Maquininha?</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Sim, 100%! Quando o operador da maquininha Ton ou Stone registrar os produtos e escolher <strong>PIX</strong>, o sistema gera o QR Code oficial escaneável na própria tela da maquininha com a chave cadastrada da distribuidora. O valor cai imediatamente na sua conta sem retenção de terceiros.
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <strong className="text-slate-900 text-sm block font-bold">5. Como escolher o melhor plano para a minha distribuidora?</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  O BebêAqui oferece opções sob medida para cada estágio do seu negócio: o <strong>Plano Distribuidora</strong> (para atendimento ágil de balcão, mesas, comandas e delivery), o <strong>Plano Atacado B2B</strong> (para faturamento em fardos/caixas e clientes PJ) e o <strong>Plano Integrado Distribuidora + Atacado</strong> (o combo definitivo com estoque unificado). Você pode consultar e alternar seu plano a qualquer momento no menu "Planos & Assinaturas".
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <strong className="text-slate-900 text-sm block font-bold">6. Como funciona o carregamento de fotos do cardápio e produtos?</strong>
+                <p className="text-slate-600 leading-relaxed">
+                  O catálogo do BebêAqui possui armazenamento inteligente de fotos em alta resolução. Caso a conexão de internet do cliente ou garçom oscile no momento do pedido, o sistema exibe instantaneamente imagens e ícones representativos da categoria, garantindo que o atendimento nunca seja interrompido.
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                <strong className="text-slate-900 text-sm block font-bold">7. Como limitar o acesso de operadores para não verem o lucro?</strong>
                 <p className="text-slate-600 leading-relaxed">
                   No menu <strong>"Funcionários & Acessos"</strong>, defina o perfil de cada pessoa como <em>"Funcionário / Operador"</em>. Eles terão acesso liberado apenas para registrar vendas no PDV e abrir mesas, mantendo os relatórios de lucro, extratos e configurações bloqueados.
                 </p>

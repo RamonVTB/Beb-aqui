@@ -744,11 +744,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const registerCompany = (data: Partial<Company> & { password?: string }) => {
     const newId = 'comp_' + Date.now();
+    const docClean = (data.document || data.cnpj || '').replace(/\D/g, '');
+    const detectedDocType: 'cpf' | 'cnpj' = data.documentType || (docClean.length === 11 ? 'cpf' : 'cnpj');
+    const docFormatted = data.document || data.cnpj || (detectedDocType === 'cpf' ? '000.000.000-00' : '00.000.000/0001-00');
+
+    // Assinante escolhe sua chave PIX exclusiva para receber suas vendas
+    const chosenPixKeyType = data.bankDetails?.pixKeyType || (detectedDocType === 'cpf' ? 'cpf' : 'phone');
+    const chosenPixKey = data.bankDetails?.pixKey || (chosenPixKeyType === 'cpf' ? docFormatted : data.phone || docFormatted);
+    const chosenBeneficiary = data.bankDetails?.beneficiaryName || data.tradeName || data.name || 'Distribuidora BebêAqui';
+
     const newCompany: Company = {
       id: newId,
-      name: data.name || 'Nova Distribuidora de Bebidas Ltda',
+      name: data.name || (detectedDocType === 'cpf' ? 'Responsável Distribuidora' : 'Nova Distribuidora de Bebidas Ltda'),
       tradeName: data.tradeName || data.name || 'Minha Distribuidora',
-      cnpj: data.cnpj || '00.000.000/0001-00',
+      documentType: detectedDocType,
+      document: docFormatted,
+      cnpj: docFormatted, // backward compatibility
       phone: data.phone || '(11) 99999-9999',
       email: data.email || 'contato@distribuidora.com',
       zipCode: data.zipCode || '01001-000',
@@ -763,16 +774,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       planPrice: data.planPrice || 80.00,
       subscriptionStatus: 'active',
       nextBillingDate: '2026-10-24',
-      paymentMethodText: data.paymentMethodText || 'PIX (Telefone: 31975346290)',
+      paymentMethodText: data.paymentMethodText || `PIX (${chosenPixKeyType.toUpperCase()}: ${chosenPixKey})`,
       bankDetails: {
-        pixKeyType: 'cnpj',
-        pixKey: data.cnpj || '00.000.000/0001-00',
-        bankName: 'Banco do Brasil',
-        agency: '0001',
-        account: '12345-6',
-        accountType: 'corrente',
-        beneficiaryName: data.tradeName || 'Distribuidora BebêAqui',
-        document: data.cnpj || '00.000.000/0001-00'
+        pixKeyType: chosenPixKeyType,
+        pixKey: chosenPixKey,
+        bankName: data.bankDetails?.bankName || 'Banco Inter',
+        agency: data.bankDetails?.agency || '0001',
+        account: data.bankDetails?.account || '12345-6',
+        accountType: data.bankDetails?.accountType || 'corrente',
+        beneficiaryName: chosenBeneficiary,
+        document: docFormatted
       },
       paymentConfig: {
         acceptPix: true,

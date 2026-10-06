@@ -17,7 +17,7 @@ export const initialCompanies: Company[] = [
     neighborhood: 'Bela Vista',
     city: 'São Paulo',
     state: 'SP',
-    logoUrl: '/src/assets/images/logo_icon_bebeaqui_1790213443500.png',
+    logoUrl: '',
     coverUrl: '/src/assets/images/hero_beverages_showcase_1790213443501.jpg',
     plan: 'Plano Distribuidora + Atacado e Varejo',
     planType: 'distribuidora_atacado',
@@ -1324,7 +1324,7 @@ export const initialPlans: PlanConfig[] = [
       'Estoque Unificado (baixa automática tanto no varejo quanto no atacado)',
       'Dashboard Consolidado (Faturamento Varejo + Faturamento Atacado)',
       'Usuários dedicados: Operador de Atacado, Atendente de Balcão e Gestor Geral',
-      'Economia de R$ 10/mês em relação aos planos separados',
+      'Economia de R$ 20/mês em relação aos planos separados',
       'Suporte Prioritário e Treinamento'
     ]
   }

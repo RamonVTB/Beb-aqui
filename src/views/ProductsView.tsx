@@ -303,10 +303,15 @@ export const ProductsView: React.FC = () => {
                           title="Clique para editar dados ou trocar foto"
                         >
                           <img
-                            src={prod.imageUrl || '/src/assets/images/hero_beverages_showcase_1790213443501.jpg'}
+                            src={prod.imageUrl || '/assets/images/hero_beverages_showcase_1790213443501.jpg'}
                             alt={prod.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform"
                             referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              const target = e.currentTarget as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+                            }}
                           />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                             <Camera className="w-4 h-4 text-amber-300" />
@@ -474,6 +479,11 @@ export const ProductsView: React.FC = () => {
                         alt="Preview"
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
+                        onError={e => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+                        }}
                       />
                     ) : (
                       <div className="text-center p-2 text-slate-500">
@@ -587,6 +597,11 @@ export const ProductsView: React.FC = () => {
                                 alt={preset.label}
                                 className="w-7 h-7 rounded object-cover flex-shrink-0"
                                 referrerPolicy="no-referrer"
+                                onError={e => {
+                                  const target = e.currentTarget as HTMLImageElement;
+                                  target.onerror = null;
+                                  target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+                                }}
                               />
                               <span className="text-[10px] font-medium leading-tight truncate">
                                 {preset.label}

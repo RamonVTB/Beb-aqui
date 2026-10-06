@@ -743,7 +743,7 @@ export const TerminalPOSView: React.FC = () => {
                       >
                         <div className="text-center border-b border-dashed border-slate-400 pb-2 mb-2">
                           <div className="font-extrabold text-xs">🍻 {activeCompany.tradeName}</div>
-                          <div className="text-[9px] text-slate-600">{activeCompany.cnpj}</div>
+                          <div className="text-[9px] text-slate-600">{activeCompany.documentType === 'cpf' ? 'CPF: ' : 'CNPJ: '}{activeCompany.document || activeCompany.cnpj}</div>
                           <div className="text-[10px] font-bold text-emerald-700 mt-1">
                             COMPROVANTE DE PAGAMENTO
                           </div>
@@ -1969,19 +1969,19 @@ export const TerminalPOSView: React.FC = () => {
                 <label className="text-[11px] font-bold text-slate-400 uppercase block mb-1">
                   Tipo de Chave PIX:
                 </label>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {(['phone', 'cnpj', 'email', 'random'] as const).map(type => (
+                <div className="grid grid-cols-5 gap-1.5">
+                  {(['phone', 'cpf', 'cnpj', 'email', 'random'] as const).map(type => (
                     <button
                       key={type}
                       type="button"
                       onClick={() => setEditCompanyPixType(type)}
-                      className={`py-1.5 px-2 rounded-lg text-center uppercase font-bold text-[11px] border cursor-pointer ${
+                      className={`py-1.5 px-1 rounded-lg text-center uppercase font-bold text-[10px] border cursor-pointer ${
                         editCompanyPixType === type
                           ? 'bg-amber-500/20 border-amber-400 text-amber-300'
                           : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      {type === 'phone' ? 'Celular' : type === 'cnpj' ? 'CNPJ' : type === 'email' ? 'E-mail' : 'Aleatória'}
+                      {type === 'phone' ? 'Celular' : type === 'cpf' ? 'CPF' : type === 'cnpj' ? 'CNPJ' : type === 'email' ? 'E-mail' : 'Aleatória'}
                     </button>
                   ))}
                 </div>
@@ -1999,6 +1999,8 @@ export const TerminalPOSView: React.FC = () => {
                   placeholder={
                     editCompanyPixType === 'phone'
                       ? '31975346290'
+                      : editCompanyPixType === 'cpf'
+                      ? '000.000.000-00'
                       : editCompanyPixType === 'cnpj'
                       ? '00.000.000/0001-00'
                       : editCompanyPixType === 'email'
@@ -2078,19 +2080,19 @@ export const TerminalPOSView: React.FC = () => {
                 <label className="text-[11px] font-bold text-slate-400 uppercase block mb-1">
                   Tipo de Chave PIX:
                 </label>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {(['phone', 'cnpj', 'email', 'random'] as const).map(type => (
+                <div className="grid grid-cols-5 gap-1.5">
+                  {(['phone', 'cpf', 'cnpj', 'email', 'random'] as const).map(type => (
                     <button
                       key={type}
                       type="button"
                       onClick={() => setEditTerminalPixType(type)}
-                      className={`py-1.5 px-2 rounded-lg text-center uppercase font-bold text-[11px] border cursor-pointer ${
+                      className={`py-1.5 px-1 rounded-lg text-center uppercase font-bold text-[10px] border cursor-pointer ${
                         editTerminalPixType === type
                           ? 'bg-blue-500/20 border-blue-400 text-blue-300'
                           : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      {type === 'phone' ? 'Celular' : type === 'cnpj' ? 'CNPJ' : type === 'email' ? 'E-mail' : 'Aleatória'}
+                      {type === 'phone' ? 'Celular' : type === 'cpf' ? 'CPF' : type === 'cnpj' ? 'CNPJ' : type === 'email' ? 'E-mail' : 'Aleatória'}
                     </button>
                   ))}
                 </div>

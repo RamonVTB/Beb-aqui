@@ -24,10 +24,15 @@ export const LandingPage: React.FC = () => {
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-slate-800">
         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
           <img
-            src="/src/assets/images/hero_beverages_showcase_1790213443501.jpg"
+            src="/assets/images/hero_beverages_showcase_1790213443501.jpg"
             alt="Bebidas BebêAqui"
             className="w-full h-full object-cover object-center"
             referrerPolicy="no-referrer"
+            onError={e => {
+              const target = e.currentTarget as HTMLImageElement;
+              target.onerror = null;
+              target.style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
         </div>
@@ -99,7 +104,7 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>R$ 70,00/mês sem taxa oculta</span>
+                  <span>R$ 80,00/mês sem taxa oculta</span>
                 </div>
               </div>
             </div>
@@ -141,7 +146,7 @@ export const LandingPage: React.FC = () => {
 
                     <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center justify-between">
                       <span>Plano BebêAqui Ativo</span>
-                      <span className="font-bold">R$ 70,00/mês</span>
+                      <span className="font-bold">R$ 80,00/mês</span>
                     </div>
                   </div>
                 </div>

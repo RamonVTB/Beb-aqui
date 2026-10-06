@@ -27,6 +27,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { consultRealCNPJ, maskCNPJ, CNPJValidationResult } from '../utils/cnpj';
+import { formatCPF, validateCPF } from '../utils/masks';
 import { playNotificationChime } from '../utils/realtimeSync';
 
 export const PlansPage: React.FC = () => {
@@ -276,7 +277,7 @@ export const PlansPage: React.FC = () => {
         'Estoque unificado com baixa automática em ambos os canais',
         'Dashboard consolidado (vendas varejo + atacado)',
         'Usuários dedicados: Atacado, Balcão e Administrador Geral',
-        'Economia de R$ 10/mês em relação aos planos separados',
+        'Economia de R$ 20/mês em relação aos planos separados',
         'Suporte prioritário e assessoria de implantação'
       ],
       popular: true,

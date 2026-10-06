@@ -46,6 +46,48 @@ export const formatCPF = (value: string): string => {
   return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9, 11)}`;
 };
 
+// Validate CPF checksum
+export const validateCPF = (cpf: string): boolean => {
+  const clean = cpf.replace(/\D/g, '');
+  if (clean.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(clean)) return false;
+
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(clean.charAt(i), 10) * (10 - i);
+  }
+  let rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(9), 10)) return false;
+
+  sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(clean.charAt(i), 10) * (11 - i);
+  }
+  rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(10), 10)) return false;
+
+  return true;
+};
+
+// Formats either CPF (11) or CNPJ (14) dynamically
+export const formatCpfOrCnpj = (value: string): string => {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length <= 11) {
+    return formatCPF(value);
+  }
+  return formatCNPJ(value);
+};
+
+// Formats PIX key based on key type
+export const formatPixKeyByType = (value: string, type: 'cpf' | 'cnpj' | 'phone' | 'email' | 'random'): string => {
+  if (type === 'cpf') return formatCPF(value);
+  if (type === 'cnpj') return formatCNPJ(value);
+  if (type === 'phone') return formatPhone(value);
+  return value.trim();
+};
+
 // Bank Agency: numbers only, up to 5 digits
 export const formatAgency = (value: string): string => {
   return value.replace(/\D/g, '').slice(0, 5);

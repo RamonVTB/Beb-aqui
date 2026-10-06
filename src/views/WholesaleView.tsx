@@ -1025,7 +1025,16 @@ export const WholesaleView: React.FC = () => {
                   return (
                     <tr key={p.id} className="hover:bg-slate-800/50 transition-colors">
                       <td className="p-3.5 font-sans font-bold text-white flex items-center gap-2">
-                        <img src={p.imageUrl} alt={p.name} className="w-8 h-8 rounded-lg object-cover bg-slate-950 shrink-0" />
+                        <img
+                          src={p.imageUrl}
+                          alt={p.name}
+                          className="w-8 h-8 rounded-lg object-cover bg-slate-950 shrink-0"
+                          onError={e => {
+                            const target = e.currentTarget as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+                          }}
+                        />
                         <span>{p.name}</span>
                       </td>
                       <td className="p-3.5 font-sans text-slate-400">Bebidas</td>
@@ -1075,7 +1084,7 @@ export const WholesaleView: React.FC = () => {
               <div className="text-center pb-2 border-b-2 border-dashed border-neutral-400 space-y-1">
                 <p className="font-black text-sm uppercase tracking-wider">{activeCompany.tradeName}</p>
                 <p className="text-[10px]">DISTRIBUIÇÃO DE BEBIDAS & ATACADO B2B</p>
-                <p className="text-[10px]">CNPJ: {activeCompany.cnpj} · Fone: {activeCompany.phone}</p>
+                <p className="text-[10px]">{activeCompany.documentType === 'cpf' ? 'CPF: ' : 'CNPJ: '}{activeCompany.document || activeCompany.cnpj} · Fone: {activeCompany.phone}</p>
                 <p className="text-[10px]">{activeCompany.address}, {activeCompany.number} - {activeCompany.city}/{activeCompany.state}</p>
               </div>
 

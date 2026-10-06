@@ -22,13 +22,22 @@ import {
   XCircle,
   RefreshCw,
   MessageCircle,
-  ExternalLink
+  ExternalLink,
+  User,
+  Smartphone,
+  CreditCard,
+  HelpCircle,
+  KeyRound,
+  Landmark
 } from 'lucide-react';
 import {
   formatCNPJ,
+  formatCPF,
+  validateCPF,
   formatPhone,
   formatCEP,
   formatAddressNumber,
+  formatPixKeyByType,
   getDigitCount
 } from '../utils/masks';
 import { fetchAddressByCep } from '../utils/cep';
@@ -39,6 +48,9 @@ export const RegisterCompanyPage: React.FC = () => {
 
   const [step, setStep] = useState<'details' | 'pix_payment'>('details');
 
+  // Tipo de Inscrição: CPF (Pessoa Física / Adega sem CNPJ) ou CNPJ (Pessoa Jurídica)
+  const [docType, setDocType] = useState<'cpf' | 'cnpj'>('cpf');
+  const [cpf, setCpf] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [tradeName, setTradeName] = useState('');
   const [cnpj, setCnpj] = useState('');
@@ -59,6 +71,12 @@ export const RegisterCompanyPage: React.FC = () => {
   const [isSearchingCep, setIsSearchingCep] = useState(false);
   const [cepSuccess, setCepSuccess] = useState(false);
 
+  // Configuração da Chave PIX Única da Distribuidora (definida pelo assinante)
+  const [subscriberPixType, setSubscriberPixType] = useState<'phone' | 'cpf' | 'cnpj' | 'email' | 'random'>('cpf');
+  const [subscriberPixKey, setSubscriberPixKey] = useState('');
+  const [subscriberBeneficiary, setSubscriberBeneficiary] = useState('');
+  const [subscriberBankName, setSubscriberBankName] = useState('Nubank');
+
   // CNPJ Receita Federal verification state
   const [isVerifyingCnpj, setIsVerifyingCnpj] = useState(false);
   const [cnpjResult, setCnpjResult] = useState<CNPJValidationResult | null>(null);
@@ -75,36 +93,92 @@ export const RegisterCompanyPage: React.FC = () => {
   const PLATFORM_PIX_PHONE = '31975346290';
   const PLATFORM_PIX_PHONE_FORMATTED = '(31) 97534-6290';
 
+  // Handler para troca de tipo de chave PIX com preenchimento automático inteligente
+  const handleSelectSubscriberPixType = (type: 'phone' | 'cpf' | 'cnpj' | 'email' | 'random') => {
+    setSubscriberPixType(type);
+    if (type === 'cpf' && cpf) {
+      setSubscriberPixKey(cpf);
+    } else if (type === 'cnpj' && cnpj) {
+      setSubscriberPixKey(cnpj);
+    } else if (type === 'phone' && phone) {
+      setSubscriberPixKey(phone);
+    } else if (type === 'email' && email) {
+      setSubscriberPixKey(email);
+    } else if (type === 'random') {
+      setSubscriberPixKey('');
+    }
+  };
+
+  const handleSubscriberPixKeyChange = (val: string) => {
+    setSubscriberPixKey(formatPixKeyByType(val, subscriberPixType));
+  };
+
+  const handleCpfChange = (val: string) => {
+    const formatted = formatCPF(val);
+    setCpf(formatted);
+    if (subscriberPixType === 'cpf') {
+      setSubscriberPixKey(formatted);
+    }
+  };
+
   // Auto-fill example helper for fast evaluation
-  const handleAutoFillExample = () => {
-    setCnpj('35.918.442/0001-90');
-    setCompanyName('DISTRIBUIDORA BEBEAQUI PRIME COMERCIO DE BEBIDAS LTDA');
-    setTradeName('BEBEAQUI PRIME DISTRIBUIDORA & ATACADO');
-    setPhone('(11) 98765-4321');
-    setEmail('contato@bebeaqui.com.br');
-    setZipCode('01001-000');
-    setAddress('Praça da Sé');
-    setNumber('100');
-    setNeighborhood('Sé');
-    setCity('São Paulo');
-    setState('SP');
-    setPassword('senha1234');
-    setConfirmPassword('senha1234');
-    setCepSuccess(true);
-    setCnpjResult({
-      valid: true,
-      cleanCnpj: '35918442000190',
-      formattedCnpj: '35.918.442/0001-90',
-      isRealAndActive: true,
-      companyData: {
-        cnpj: '35.918.442/0001-90',
-        razaoSocial: 'DISTRIBUIDORA BEBEAQUI PRIME COMERCIO DE BEBIDAS LTDA',
-        nomeFantasia: 'BEBEAQUI PRIME DISTRIBUIDORA & ATACADO',
-        situacaoCadastral: 'ATIVA',
-        isAtiva: true,
-        cnaeDescricao: 'Comércio atacadista de cerveja, chope e refrigerante'
-      }
-    });
+  const handleAutoFillExample = (forcedType?: 'cpf' | 'cnpj') => {
+    const targetType = forcedType || docType;
+    if (targetType === 'cpf') {
+      setDocType('cpf');
+      setCpf('421.890.348-12');
+      setCompanyName('Carlos Eduardo da Silva');
+      setTradeName('Adega & Distribuidora Silva Express');
+      setPhone('(11) 98765-4321');
+      setEmail('carlos.adega@gmail.com');
+      setZipCode('01001-000');
+      setAddress('Praça da Sé');
+      setNumber('100');
+      setNeighborhood('Sé');
+      setCity('São Paulo');
+      setState('SP');
+      setPassword('senha1234');
+      setConfirmPassword('senha1234');
+      setCepSuccess(true);
+      setSubscriberPixType('cpf');
+      setSubscriberPixKey('421.890.348-12');
+      setSubscriberBeneficiary('Carlos Eduardo da Silva');
+      setSubscriberBankName('Nubank');
+    } else {
+      setDocType('cnpj');
+      setCnpj('35.918.442/0001-90');
+      setCompanyName('DISTRIBUIDORA BEBEAQUI PRIME COMERCIO DE BEBIDAS LTDA');
+      setTradeName('BEBEAQUI PRIME DISTRIBUIDORA & ATACADO');
+      setPhone('(11) 98765-4321');
+      setEmail('contato@bebeaqui.com.br');
+      setZipCode('01001-000');
+      setAddress('Praça da Sé');
+      setNumber('100');
+      setNeighborhood('Sé');
+      setCity('São Paulo');
+      setState('SP');
+      setPassword('senha1234');
+      setConfirmPassword('senha1234');
+      setCepSuccess(true);
+      setSubscriberPixType('phone');
+      setSubscriberPixKey('(11) 98765-4321');
+      setSubscriberBeneficiary('BEBEAQUI PRIME DISTRIBUIDORA');
+      setSubscriberBankName('Banco Inter');
+      setCnpjResult({
+        valid: true,
+        cleanCnpj: '35918442000190',
+        formattedCnpj: '35.918.442/0001-90',
+        isRealAndActive: true,
+        companyData: {
+          cnpj: '35.918.442/0001-90',
+          razaoSocial: 'DISTRIBUIDORA BEBEAQUI PRIME COMERCIO DE BEBIDAS LTDA',
+          nomeFantasia: 'BEBEAQUI PRIME DISTRIBUIDORA & ATACADO',
+          situacaoCadastral: 'ATIVA',
+          isAtiva: true,
+          cnaeDescricao: 'Comércio atacadista de cerveja, chope e refrigerante'
+        }
+      });
+    }
   };
 
   // Real-time CNPJ validation with Receita Federal / BrasilAPI
@@ -218,15 +292,43 @@ export const RegisterCompanyPage: React.FC = () => {
     e.preventDefault();
     setErrorMsg('');
 
-    const cleanCnpj = cnpj.replace(/\D/g, '');
-    if (cleanCnpj.length !== 14) {
-      setErrorMsg('O CNPJ deve conter exatamente 14 números.');
-      return;
-    }
+    if (docType === 'cpf') {
+      const cleanCpf = cpf.replace(/\D/g, '');
+      if (cleanCpf.length !== 11) {
+        setErrorMsg('O CPF deve conter exatamente 11 números.');
+        return;
+      }
+      if (!validateCPF(cleanCpf)) {
+        setErrorMsg('O CPF informado é inválido. Por favor, verifique os números digitados.');
+        return;
+      }
+      if (!companyName.trim()) {
+        setErrorMsg('Informe o nome completo do titular / responsável legal.');
+        return;
+      }
+      if (!tradeName.trim()) {
+        setErrorMsg('Informe o nome fantasia da sua distribuidora / adega.');
+        return;
+      }
+    } else {
+      const cleanCnpj = cnpj.replace(/\D/g, '');
+      if (cleanCnpj.length !== 14) {
+        setErrorMsg('O CNPJ deve conter exatamente 14 números.');
+        return;
+      }
 
-    if (cnpjResult && (!cnpjResult.valid || !cnpjResult.isRealAndActive)) {
-      setErrorMsg(cnpjResult.error || 'O CNPJ informado é inválido ou não foi localizado na Receita Federal. Por favor, informe um CNPJ real e ativo.');
-      return;
+      if (cnpjResult && (!cnpjResult.valid || !cnpjResult.isRealAndActive)) {
+        setErrorMsg(cnpjResult.error || 'O CNPJ informado é inválido ou não foi localizado na Receita Federal. Por favor, informe um CNPJ real e ativo.');
+        return;
+      }
+      if (!companyName.trim()) {
+        setErrorMsg('Informe a Razão Social da empresa.');
+        return;
+      }
+      if (!tradeName.trim()) {
+        setErrorMsg('Informe o nome fantasia da distribuidora.');
+        return;
+      }
     }
 
     const cleanPhone = phone.replace(/\D/g, '');
@@ -243,6 +345,43 @@ export const RegisterCompanyPage: React.FC = () => {
 
     if (!number.trim()) {
       setErrorMsg('Informe o número do estabelecimento.');
+      return;
+    }
+
+    // Validação da Chave PIX Exclusiva da Distribuidora (definida pelo assinante)
+    const cleanPix = subscriberPixKey.trim();
+    if (!cleanPix) {
+      setErrorMsg('Por favor, informe a Chave PIX da sua distribuidora para recebimento das vendas.');
+      return;
+    }
+
+    if (subscriberPixType === 'cpf') {
+      const c = cleanPix.replace(/\D/g, '');
+      if (c.length !== 11 || !validateCPF(c)) {
+        setErrorMsg('A Chave PIX informada como CPF é inválida.');
+        return;
+      }
+    } else if (subscriberPixType === 'cnpj') {
+      const c = cleanPix.replace(/\D/g, '');
+      if (c.length !== 14) {
+        setErrorMsg('A Chave PIX informada como CNPJ deve conter exatamente 14 dígitos.');
+        return;
+      }
+    } else if (subscriberPixType === 'phone') {
+      const c = cleanPix.replace(/\D/g, '');
+      if (c.length < 10) {
+        setErrorMsg('A Chave PIX celular deve conter DDD e número completo (ao menos 10 dígitos).');
+        return;
+      }
+    } else if (subscriberPixType === 'email') {
+      if (!cleanPix.includes('@') || !cleanPix.includes('.')) {
+        setErrorMsg('A Chave PIX de e-mail informada é inválida.');
+        return;
+      }
+    }
+
+    if (!subscriberBeneficiary.trim()) {
+      setErrorMsg('Informe o nome do titular / favorecido da sua conta bancária PIX.');
       return;
     }
 
@@ -298,10 +437,13 @@ export const RegisterCompanyPage: React.FC = () => {
     setLoading(true);
 
     setTimeout(() => {
+      const docFormatted = docType === 'cpf' ? cpf : cnpj;
       registerCompany({
         name: companyName,
         tradeName: tradeName || companyName,
-        cnpj,
+        documentType: docType,
+        document: docFormatted,
+        cnpj: docFormatted, // backward compatibility
         phone,
         email,
         zipCode,
@@ -311,7 +453,17 @@ export const RegisterCompanyPage: React.FC = () => {
         city,
         state,
         password,
-        paymentMethodText: `PIX Confirmado (Telefone: ${PLATFORM_PIX_PHONE}) - Transação: ${pixTransactionId || 'E2E-OK'}`
+        bankDetails: {
+          pixKeyType: subscriberPixType,
+          pixKey: subscriberPixKey,
+          beneficiaryName: subscriberBeneficiary || tradeName || companyName,
+          bankName: subscriberBankName || 'Nubank',
+          agency: '0001',
+          account: '12345-6',
+          accountType: 'corrente',
+          document: docFormatted
+        },
+        paymentMethodText: `PIX Plataforma Confirmado (Telefone: ${PLATFORM_PIX_PHONE}) - Transação: ${pixTransactionId || 'E2E-OK'}`
       });
       setLoading(false);
     }, 600);
@@ -337,7 +489,7 @@ export const RegisterCompanyPage: React.FC = () => {
           {step === 'details' && (
             <button
               type="button"
-              onClick={handleAutoFillExample}
+              onClick={() => handleAutoFillExample()}
               className="text-xs text-amber-400 hover:text-amber-300 underline font-medium cursor-pointer"
             >
               ⚡ Preencher dados de exemplo para teste rápido
@@ -380,109 +532,264 @@ export const RegisterCompanyPage: React.FC = () => {
 
           {step === 'details' ? (
             <form onSubmit={handleDetailsSubmit} className="space-y-6">
-              {/* Section 1: Dados da Empresa */}
+              {/* Section 1: Dados da Empresa / Assinante */}
               <div className="space-y-4">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2 pb-2 border-b border-slate-800">
-                  <Building2 className="w-4 h-4" />
-                  <span>1. Dados Cadastrais da Distribuidora</span>
-                </h3>
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                    <Building2 className="w-4 h-4" />
+                    <span>1. Dados Cadastrais do Assinante / Distribuidora</span>
+                  </h3>
+                  <span className="text-[11px] text-slate-400">
+                    {docType === 'cpf' ? 'Pessoa Física (Sem CNPJ)' : 'Pessoa Jurídica'}
+                  </span>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-medium text-slate-300">Razão Social / Nome da Empresa *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ex: Distribuidora Silva & Cia Ltda"
-                      value={companyName}
-                      onChange={e => setCompanyName(e.target.value)}
-                      className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
+                {/* Seletor CPF ou CNPJ */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-slate-300 block">
+                    Como deseja cadastrar sua distribuidora?
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDocType('cpf');
+                        setErrorMsg('');
+                        if (subscriberPixType === 'cnpj') {
+                          setSubscriberPixType('cpf');
+                          if (cpf) setSubscriberPixKey(cpf);
+                        }
+                      }}
+                      className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
+                        docType === 'cpf'
+                          ? 'bg-amber-500/15 border-amber-500 text-white shadow-lg shadow-amber-500/10'
+                          : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-xl shrink-0 ${
+                        docType === 'cpf' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+                      }`}>
+                        <User className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2 font-bold text-sm">
+                          <span>Cadastro por CPF</span>
+                          <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 rounded">
+                            Recomendado
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-tight">
+                          Ideal para adegas, depósitos e distribuidoras que não possuem CNPJ.
+                        </p>
+                      </div>
+                    </button>
 
-                  <div>
-                    <label className="text-xs font-medium text-slate-300">Nome Fantasia (Como o cliente conhece) *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ex: Distribuidora Central de Bebidas"
-                      value={tradeName}
-                      onChange={e => setTradeName(e.target.value)}
-                      className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
-                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDocType('cnpj');
+                        setErrorMsg('');
+                      }}
+                      className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
+                        docType === 'cnpj'
+                          ? 'bg-amber-500/15 border-amber-500 text-white shadow-lg shadow-amber-500/10'
+                          : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-xl shrink-0 ${
+                        docType === 'cnpj' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+                      }`}>
+                        <Building2 className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="font-bold text-sm">
+                          <span>Cadastro por CNPJ</span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-tight">
+                          Para distribuidoras formalizadas como LTDA, EIRELI ou MEI com CNPJ ativo.
+                        </p>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
-                      <span>CNPJ da Distribuidora *</span>
-                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
-                        getDigitCount(cnpj) === 14
-                          ? 'bg-emerald-500/20 text-emerald-400 font-bold'
-                          : 'bg-slate-800 text-slate-400'
-                      }`}>
-                        {getDigitCount(cnpj)}/14 dígitos
-                      </span>
-                    </label>
-                    <div className="relative mt-1.5">
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={18}
-                        required
-                        placeholder="00.000.000/0001-00"
-                        value={cnpj}
-                        onChange={e => handleCnpjChange(e.target.value)}
-                        className={`w-full px-3.5 py-2.5 bg-slate-950 border rounded-xl text-sm text-white font-mono focus:outline-none transition-colors ${
-                          cnpjResult?.valid && cnpjResult.isRealAndActive
-                            ? 'border-emerald-500/60 focus:border-emerald-400'
-                            : cnpjResult && !cnpjResult.valid
-                            ? 'border-rose-500 focus:border-rose-400'
-                            : 'border-slate-700 focus:border-amber-400'
-                        }`}
-                      />
-                      {isVerifyingCnpj && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-xs text-amber-400">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span className="text-[10px]">Consultando Receita...</span>
-                        </div>
-                      )}
+                {/* Campos quando for CPF */}
+                {docType === 'cpf' ? (
+                  <div className="space-y-4 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
+                          <span>CPF do Responsável / Titular *</span>
+                          <div className="flex items-center gap-1.5">
+                            {getDigitCount(cpf) === 11 && validateCPF(cpf) && (
+                              <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-0.5">
+                                <Check className="w-3 h-3" /> CPF Válido
+                              </span>
+                            )}
+                            {getDigitCount(cpf) === 11 && !validateCPF(cpf) && (
+                              <span className="text-[10px] text-rose-400 font-bold flex items-center gap-0.5">
+                                <AlertCircle className="w-3 h-3" /> CPF Inválido
+                              </span>
+                            )}
+                            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                              getDigitCount(cpf) === 11
+                                ? validateCPF(cpf) ? 'bg-emerald-500/20 text-emerald-400 font-bold' : 'bg-rose-500/20 text-rose-400 font-bold'
+                                : 'bg-slate-800 text-slate-400'
+                            }`}>
+                              {getDigitCount(cpf)}/11
+                            </span>
+                          </div>
+                        </label>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={14}
+                          required
+                          placeholder="000.000.000-00"
+                          value={cpf}
+                          onChange={e => handleCpfChange(e.target.value)}
+                          className={`w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border rounded-xl text-sm text-white font-mono focus:outline-none transition-colors ${
+                            getDigitCount(cpf) === 11 && validateCPF(cpf)
+                              ? 'border-emerald-500/60 focus:border-emerald-400'
+                              : getDigitCount(cpf) === 11 && !validateCPF(cpf)
+                              ? 'border-rose-500 focus:border-rose-400'
+                              : 'border-slate-700 focus:border-amber-400'
+                          }`}
+                        />
+                        <p className="text-[10px] text-slate-500 mt-1">Apenas números (11 dígitos com validação)</p>
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-xs font-medium text-slate-300">Nome Completo do Titular (Responsável Legal) *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ex: Carlos Eduardo da Silva"
+                          value={companyName}
+                          onChange={e => {
+                            setCompanyName(e.target.value);
+                            if (!subscriberBeneficiary) setSubscriberBeneficiary(e.target.value);
+                          }}
+                          className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                        />
+                        <p className="text-[10px] text-slate-500 mt-1">Nome do assinante ou proprietário da distribuidora</p>
+                      </div>
                     </div>
 
-                    {/* Verification Status Feedback */}
-                    {cnpjResult?.valid && cnpjResult.isRealAndActive && (
-                      <div className="mt-1.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-0.5">
-                        <div className="flex items-center gap-1 font-bold">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                          <span>CNPJ Real & Ativo na Receita Federal</span>
-                        </div>
-                        <p className="text-[10px] text-slate-300 truncate">
-                          {cnpjResult.companyData?.razaoSocial}
-                        </p>
-                      </div>
-                    )}
-
-                    {cnpjResult && !cnpjResult.valid && (
-                      <div className="mt-1.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-300 space-y-0.5">
-                        <div className="flex items-center gap-1 font-bold">
-                          <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                          <span>CNPJ Inválido ou Não Localizado</span>
-                        </div>
-                        <p className="text-[10px] text-rose-300/90 leading-tight">
-                          {cnpjResult.error}
-                        </p>
-                      </div>
-                    )}
-
-                    {!cnpjResult && !isVerifyingCnpj && (
-                      <p className="text-[10px] text-slate-500 mt-1">Validação automática e consulta à Receita Federal</p>
-                    )}
+                    <div>
+                      <label className="text-xs font-medium text-slate-300">Nome da sua Distribuidora / Nome Fantasia *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Ex: Adega & Distribuidora Silva Express, Distribuidora Central..."
+                        value={tradeName}
+                        onChange={e => setTradeName(e.target.value)}
+                        className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                      <p className="text-[10px] text-slate-500 mt-1">Como seus clientes reconhecerão seu comércio no cardápio e nos comprovantes</p>
+                    </div>
                   </div>
+                ) : (
+                  /* Campos quando for CNPJ */
+                  <div className="space-y-4 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
+                          <span>CNPJ da Distribuidora *</span>
+                          <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                            getDigitCount(cnpj) === 14
+                              ? 'bg-emerald-500/20 text-emerald-400 font-bold'
+                              : 'bg-slate-800 text-slate-400'
+                          }`}>
+                            {getDigitCount(cnpj)}/14 dígitos
+                          </span>
+                        </label>
+                        <div className="relative mt-1.5">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={18}
+                            required
+                            placeholder="00.000.000/0001-00"
+                            value={cnpj}
+                            onChange={e => handleCnpjChange(e.target.value)}
+                            className={`w-full px-3.5 py-2.5 bg-slate-950 border rounded-xl text-sm text-white font-mono focus:outline-none transition-colors ${
+                              cnpjResult?.valid && cnpjResult.isRealAndActive
+                                ? 'border-emerald-500/60 focus:border-emerald-400'
+                                : cnpjResult && !cnpjResult.valid
+                                ? 'border-rose-500 focus:border-rose-400'
+                                : 'border-slate-700 focus:border-amber-400'
+                            }`}
+                          />
+                          {isVerifyingCnpj && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-xs text-amber-400">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span className="text-[10px]">Consultando Receita...</span>
+                            </div>
+                          )}
+                        </div>
 
+                        {cnpjResult?.valid && cnpjResult.isRealAndActive && (
+                          <div className="mt-1.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-0.5">
+                            <div className="flex items-center gap-1 font-bold">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              <span>CNPJ Real & Ativo na Receita Federal</span>
+                            </div>
+                            <p className="text-[10px] text-slate-300 truncate">
+                              {cnpjResult.companyData?.razaoSocial}
+                            </p>
+                          </div>
+                        )}
+
+                        {cnpjResult && !cnpjResult.valid && (
+                          <div className="mt-1.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-300 space-y-0.5">
+                            <div className="flex items-center gap-1 font-bold">
+                              <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                              <span>CNPJ Inválido ou Não Localizado</span>
+                            </div>
+                            <p className="text-[10px] text-rose-300/90 leading-tight">
+                              {cnpjResult.error}
+                            </p>
+                          </div>
+                        )}
+
+                        {!cnpjResult && !isVerifyingCnpj && (
+                          <p className="text-[10px] text-slate-500 mt-1">Validação automática e consulta à Receita Federal</p>
+                        )}
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-xs font-medium text-slate-300">Razão Social da Empresa *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ex: Distribuidora Silva & Cia Ltda"
+                          value={companyName}
+                          onChange={e => setCompanyName(e.target.value)}
+                          className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-slate-300">Nome Fantasia (Como o cliente conhece) *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Ex: Distribuidora Central de Bebidas"
+                        value={tradeName}
+                        onChange={e => setTradeName(e.target.value)}
+                        className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Contatos comuns (Telefone e E-mail) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
                     <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
-                      <span>Telefone / WhatsApp *</span>
+                      <span>Telefone / WhatsApp Comercial *</span>
                       <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                         getDigitCount(phone) >= 10
                           ? 'bg-emerald-500/20 text-emerald-400 font-bold'
@@ -498,20 +805,31 @@ export const RegisterCompanyPage: React.FC = () => {
                       required
                       placeholder="(11) 98765-4321"
                       value={phone}
-                      onChange={e => setPhone(formatPhone(e.target.value))}
+                      onChange={e => {
+                        const fmt = formatPhone(e.target.value);
+                        setPhone(fmt);
+                        if (subscriberPixType === 'phone') {
+                          setSubscriberPixKey(fmt);
+                        }
+                      }}
                       className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white font-mono focus:outline-none focus:border-amber-400 transition-colors"
                     />
                     <p className="text-[10px] text-slate-500 mt-1">Limite máx. 11 números (DDD + 9 dígitos)</p>
                   </div>
 
                   <div>
-                    <label className="text-xs font-medium text-slate-300">E-mail da Distribuidora *</label>
+                    <label className="text-xs font-medium text-slate-300">E-mail de Acesso e Contato *</label>
                     <input
                       type="email"
                       required
                       placeholder="contato@distribuidora.com"
                       value={email}
-                      onChange={e => setEmail(e.target.value)}
+                      onChange={e => {
+                        setEmail(e.target.value);
+                        if (subscriberPixType === 'email') {
+                          setSubscriberPixKey(e.target.value);
+                        }
+                      }}
                       className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
                     />
                     <p className="text-[10px] text-slate-500 mt-1">Utilizado para login e avisos da conta</p>
@@ -644,11 +962,234 @@ export const RegisterCompanyPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Section 3: Segurança */}
+              {/* Section 3: Chave PIX Única da Distribuidora */}
+              <div className="space-y-4 pt-4">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+                    <QrCode className="w-4 h-4 text-emerald-400" />
+                    <span>3. Chave PIX Exclusiva da Distribuidora (Recebimento de Vendas)</span>
+                  </h3>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    Chave Única no Sistema
+                  </span>
+                </div>
+
+                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-start gap-3 text-xs text-emerald-300">
+                  <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0">
+                    <KeyRound className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <span className="font-bold text-emerald-400 block text-sm">
+                      Você escolhe qual Chave PIX deseja usar na sua linha do sistema
+                    </span>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Esta chave será <strong>única e exclusiva da sua distribuidora</strong> no BebêAqui. Quando qualquer cliente pagar no balcão (PDV), nas mesas pelo cardápio digital ou nas maquininhas de cartão com PIX, o dinheiro será creditado <strong>diretamente nesta conta</strong>, sem intermediários!
+                    </p>
+                  </div>
+                </div>
+
+                {/* Seletor de Tipo de Chave */}
+                <div>
+                  <label className="text-xs font-medium text-slate-300 block mb-1.5">
+                    Tipo de Chave PIX da sua Conta:
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSelectSubscriberPixType('cpf')}
+                      className={`p-2.5 rounded-xl border text-center font-bold text-xs cursor-pointer transition-all flex flex-col items-center gap-1 ${
+                        subscriberPixType === 'cpf'
+                          ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-md shadow-amber-500/10'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <User className="w-4 h-4" />
+                      <span>CPF</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSelectSubscriberPixType('phone')}
+                      className={`p-2.5 rounded-xl border text-center font-bold text-xs cursor-pointer transition-all flex flex-col items-center gap-1 ${
+                        subscriberPixType === 'phone'
+                          ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-md shadow-amber-500/10'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Celular</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSelectSubscriberPixType('email')}
+                      className={`p-2.5 rounded-xl border text-center font-bold text-xs cursor-pointer transition-all flex flex-col items-center gap-1 ${
+                        subscriberPixType === 'email'
+                          ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-md shadow-amber-500/10'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>E-mail</span>
+                    </button>
+
+                    {docType === 'cnpj' && (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectSubscriberPixType('cnpj')}
+                        className={`p-2.5 rounded-xl border text-center font-bold text-xs cursor-pointer transition-all flex flex-col items-center gap-1 ${
+                          subscriberPixType === 'cnpj'
+                            ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-md shadow-amber-500/10'
+                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        <Building2 className="w-4 h-4" />
+                        <span>CNPJ</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => handleSelectSubscriberPixType('random')}
+                      className={`p-2.5 rounded-xl border text-center font-bold text-xs cursor-pointer transition-all flex flex-col items-center gap-1 ${
+                        subscriberPixType === 'random'
+                          ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-md shadow-amber-500/10'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <KeyRound className="w-4 h-4" />
+                      <span>Aleatória (EVP)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Atalhos rápidos de preenchimento */}
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="text-slate-400 text-[11px]">Preenchimento rápido:</span>
+                  {cpf && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubscriberPixType('cpf');
+                        setSubscriberPixKey(cpf);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium border border-slate-700 cursor-pointer"
+                    >
+                      Usar meu CPF ({cpf})
+                    </button>
+                  )}
+                  {phone && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubscriberPixType('phone');
+                        setSubscriberPixKey(phone);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium border border-slate-700 cursor-pointer"
+                    >
+                      Usar meu Celular ({phone})
+                    </button>
+                  )}
+                  {email && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubscriberPixType('email');
+                        setSubscriberPixKey(email);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium border border-slate-700 cursor-pointer"
+                    >
+                      Usar meu E-mail ({email})
+                    </button>
+                  )}
+                </div>
+
+                {/* Input da Chave PIX e dados bancários */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                  <div>
+                    <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
+                      <span>Chave PIX Cadastrada *</span>
+                      {subscriberPixType === 'cpf' && (
+                        <span className="text-[10px] font-mono text-slate-400">{getDigitCount(subscriberPixKey)}/11</span>
+                      )}
+                      {subscriberPixType === 'phone' && (
+                        <span className="text-[10px] font-mono text-slate-400">{getDigitCount(subscriberPixKey)}/11</span>
+                      )}
+                      {subscriberPixType === 'cnpj' && (
+                        <span className="text-[10px] font-mono text-slate-400">{getDigitCount(subscriberPixKey)}/14</span>
+                      )}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={
+                        subscriberPixType === 'cpf'
+                          ? '000.000.000-00'
+                          : subscriberPixType === 'phone'
+                          ? '(11) 98765-4321'
+                          : subscriberPixType === 'cnpj'
+                          ? '00.000.000/0001-00'
+                          : subscriberPixType === 'email'
+                          ? 'financeiro@distribuidora.com'
+                          : 'Cole a chave aleatória (EVP)'
+                      }
+                      value={subscriberPixKey}
+                      onChange={e => handleSubscriberPixKeyChange(e.target.value)}
+                      className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm font-mono text-emerald-400 font-bold focus:outline-none focus:border-emerald-400"
+                    />
+                    <p className="text-[10px] text-slate-500 mt-1">
+                      {subscriberPixType === 'cpf' ? 'Chave CPF do titular' : subscriberPixType === 'phone' ? 'Celular com DDD' : subscriberPixType === 'email' ? 'E-mail bancário' : 'Chave exclusiva da distribuidora'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium text-slate-300">
+                      Nome do Titular da Conta / Favorecido *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: Carlos Eduardo da Silva"
+                      value={subscriberBeneficiary}
+                      onChange={e => setSubscriberBeneficiary(e.target.value)}
+                      className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                    />
+                    <p className="text-[10px] text-slate-500 mt-1">Nome exibido no comprovante do cliente</p>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium text-slate-300">
+                      Banco / Instituição Financeira *
+                    </label>
+                    <select
+                      value={subscriberBankName}
+                      onChange={e => setSubscriberBankName(e.target.value)}
+                      className="w-full mt-1.5 px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                    >
+                      <option value="Nubank">Nubank</option>
+                      <option value="Banco Inter">Banco Inter</option>
+                      <option value="Itaú Unibanco">Itaú Unibanco</option>
+                      <option value="Bradesco">Bradesco</option>
+                      <option value="Santander">Santander</option>
+                      <option value="Mercado Pago">Mercado Pago</option>
+                      <option value="Caixa Econômica">Caixa Econômica</option>
+                      <option value="Banco do Brasil">Banco do Brasil</option>
+                      <option value="PagBank">PagBank (PagSeguro)</option>
+                      <option value="C6 Bank">C6 Bank</option>
+                      <option value="Sicredi">Sicredi</option>
+                      <option value="Sicoob">Sicoob</option>
+                      <option value="Outro Banco">Outro Banco</option>
+                    </select>
+                    <p className="text-[10px] text-slate-500 mt-1">Onde está aberta a conta do PIX</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 4: Segurança */}
               <div className="space-y-4 pt-4">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2 pb-2 border-b border-slate-800">
                   <Lock className="w-4 h-4" />
-                  <span>3. Senha de Acesso do Administrador</span>
+                  <span>4. Senha de Acesso do Administrador</span>
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -808,7 +1349,7 @@ export const RegisterCompanyPage: React.FC = () => {
                       <span>🍻 Plano Distribuidora BebêAqui</span>
                     </h3>
                     <p className="text-xs text-slate-400">
-                      Empresa: <strong>{tradeName || companyName}</strong> ({cnpj})
+                      Empresa: <strong>{tradeName || companyName}</strong> ({docType === 'cpf' ? `CPF: ${cpf}` : `CNPJ: ${cnpj}`})
                     </p>
                   </div>
                   <div className="text-left sm:text-right">
@@ -819,12 +1360,29 @@ export const RegisterCompanyPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Box da Chave PIX Única da Distribuidora Cadastrada */}
+                <div className="p-3.5 bg-slate-900 border border-emerald-500/30 rounded-xl space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium">Sua Chave PIX exclusiva (onde você receberá suas vendas):</span>
+                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      Chave {subscriberPixType.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="text-base text-emerald-400 font-mono font-bold">
+                    {subscriberPixKey}
+                  </div>
+                  <div className="text-[11px] text-slate-400 flex flex-wrap items-center gap-3">
+                    <span>Titular: <strong className="text-slate-200">{subscriberBeneficiary || tradeName || companyName}</strong></span>
+                    <span>Banco: <strong className="text-slate-200">{subscriberBankName}</strong></span>
+                  </div>
+                </div>
+
                 {/* PIX Key Details */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
                       <QrCode className="w-4 h-4 text-emerald-400" />
-                      <span>Chave PIX Oficial (Telefone)</span>
+                      <span>Chave PIX Oficial da Plataforma BebêAqui</span>
                     </span>
                     <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                       Chave Telefone Ativa
@@ -868,13 +1426,13 @@ export const RegisterCompanyPage: React.FC = () => {
                 <div className="bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-2.5 text-xs text-slate-300">
                   <div className="font-bold text-white flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-amber-400" />
-                    <span>Como pagar seu plano:</span>
+                    <span>Como pagar sua ativação:</span>
                   </div>
                   <ol className="list-decimal list-inside space-y-1.5 text-slate-300">
                     <li>Abra o aplicativo do seu banco ou carteira digital.</li>
                     <li>Escolha a opção <strong>PIX</strong> e selecione o tipo de chave <strong>Telefone</strong>.</li>
                     <li>Cole ou digite a chave: <strong className="text-amber-300 font-mono">31975346290</strong>.</li>
-                    <li>Confirme o valor de <strong className="text-amber-300 font-mono">R$ 70,00</strong> e conclua a transferência.</li>
+                    <li>Confirme o valor de <strong className="text-amber-300 font-mono">R$ 80,00</strong> e conclua a transferência.</li>
                   </ol>
                 </div>
 
@@ -905,7 +1463,7 @@ export const RegisterCompanyPage: React.FC = () => {
                       className="w-4 h-4 mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-400"
                     />
                     <span className="text-xs text-slate-200">
-                      Confirmo que enviei o valor de <strong>R$ 70,00</strong> para o PIX telefone <strong>(31) 97534-6290</strong>.
+                      Confirmo que enviei o valor de <strong>R$ 80,00</strong> para o PIX telefone <strong>(31) 97534-6290</strong>.
                     </span>
                   </label>
                 </div>
@@ -921,7 +1479,7 @@ export const RegisterCompanyPage: React.FC = () => {
                   <div>
                     <h4 className="text-base font-bold text-white">Consultando Liquidação do PIX...</h4>
                     <p className="text-xs text-slate-300 mt-1">
-                      Conferindo se o PIX de <strong>R$ 70,00</strong> foi recebido na chave <strong>(31) 97534-6290</strong> em nome de <strong>{pixPayerName || 'sua conta'}</strong>...
+                      Conferindo se o PIX de <strong>R$ 80,00</strong> foi recebido na chave <strong>(31) 97534-6290</strong> em nome de <strong>{pixPayerName || 'sua conta'}</strong>...
                     </p>
                   </div>
                   <div className="inline-block px-3 py-1 rounded-full bg-slate-950 text-[11px] font-mono text-slate-400 border border-slate-800">
@@ -944,7 +1502,7 @@ export const RegisterCompanyPage: React.FC = () => {
                       🎉 Acesso ao BebêAqui Liberado!
                     </h3>
                     <p className="text-xs text-slate-300 max-w-md mx-auto">
-                      Identificamos com sucesso o recebimento de <strong>R$ 70,00</strong> na chave PIX <strong>(31) 97534-6290</strong>. Sua conta está ativa.
+                      Identificamos com sucesso o recebimento de <strong>R$ 80,00</strong> na chave PIX <strong>(31) 97534-6290</strong>. Sua conta está ativa.
                     </p>
                   </div>
 
@@ -952,7 +1510,11 @@ export const RegisterCompanyPage: React.FC = () => {
                   <div className="p-4 bg-slate-950/80 rounded-xl border border-emerald-500/30 text-left text-xs space-y-2 font-mono">
                     <div className="flex justify-between border-b border-slate-800 pb-1.5">
                       <span className="text-slate-400">Distribuidora:</span>
-                      <span className="font-bold text-white font-sans">{tradeName || companyName}</span>
+                      <span className="font-bold text-white font-sans">{tradeName || companyName} ({docType === 'cpf' ? `CPF: ${cpf}` : `CNPJ: ${cnpj}`})</span>
+                    </div>
+                    <div className="flex justify-between border-b border-slate-800 pb-1.5">
+                      <span className="text-slate-400">Sua Chave PIX de Vendas:</span>
+                      <span className="text-emerald-300 font-bold">{subscriberPixKey} ({subscriberPixType.toUpperCase()})</span>
                     </div>
                     <div className="flex justify-between border-b border-slate-800 pb-1.5">
                       <span className="text-slate-400">Titular Pagador:</span>
@@ -960,7 +1522,7 @@ export const RegisterCompanyPage: React.FC = () => {
                     </div>
                     <div className="flex justify-between border-b border-slate-800 pb-1.5">
                       <span className="text-slate-400">Valor Pago:</span>
-                      <span className="text-emerald-400 font-bold">R$ 70,00</span>
+                      <span className="text-emerald-400 font-bold">R$ 80,00</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Código E2E / Autenticação:</span>
@@ -994,7 +1556,7 @@ export const RegisterCompanyPage: React.FC = () => {
                         Pagamento PIX Não Identificado ou Não Concluído
                       </h4>
                       <p className="text-xs text-rose-200 leading-relaxed">
-                        {pixErrorMsg || 'Ainda não identificamos a transferência de R$ 70,00 na chave telefone (31) 97534-6290.'}
+                        {pixErrorMsg || 'Ainda não identificamos a transferência de R$ 80,00 na chave telefone (31) 97534-6290.'}
                       </p>
                     </div>
                   </div>
@@ -1008,7 +1570,7 @@ export const RegisterCompanyPage: React.FC = () => {
                     <ul className="list-disc list-inside space-y-1.5 text-slate-300 text-[11px] leading-relaxed">
                       <li><strong>Transferência ainda não concluída no banco:</strong> Verifique no seu aplicativo bancário se o comprovante final foi gerado.</li>
                       <li><strong>Chave incorreta:</strong> A chave oficial deve ser o telefone celular <strong className="text-amber-300 font-mono">31975346290</strong>.</li>
-                      <li><strong>Valor divergente:</strong> O valor do plano é exatamente <strong className="text-amber-300 font-mono">R$ 70,00</strong>.</li>
+                      <li><strong>Valor divergente:</strong> O valor do plano é exatamente <strong className="text-amber-300 font-mono">R$ 80,00</strong>.</li>
                       <li><strong>Lentidão do Banco Central:</strong> Em horários de pico, pode levar até 2 minutos para liquidação.</li>
                     </ul>
                   </div>
@@ -1037,7 +1599,7 @@ export const RegisterCompanyPage: React.FC = () => {
                   <div className="pt-2 border-t border-slate-800 text-center">
                     <a
                       href={`https://wa.me/5531975346290?text=${encodeURIComponent(
-                        `Olá, realizei o PIX de R$ 70,00 do plano BebêAqui para a distribuidora ${tradeName || companyName} e gostaria de confirmar.`
+                        `Olá, realizei o PIX de R$ 80,00 do plano BebêAqui para a distribuidora ${tradeName || companyName} e gostaria de confirmar.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -1060,7 +1622,7 @@ export const RegisterCompanyPage: React.FC = () => {
                     className="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 font-extrabold text-base flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 transition-all cursor-pointer"
                   >
                     <CheckCircle2 className="w-5 h-5" />
-                    <span>Conferir e Confirmar Pagamento do PIX (R$ 70,00)</span>
+                    <span>Conferir e Confirmar Pagamento do PIX (R$ 80,00)</span>
                   </button>
 
                   {/* Fast Simulation Bar */}

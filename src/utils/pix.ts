@@ -72,16 +72,31 @@ export function generatePixPayload(params: PixPayloadParams): string {
     return '';
   }
 
-  // Clean key format
+  // Clean key format based on key type
   let cleanKey = pixKey.trim();
-  if (params.pixKeyType === 'phone' || (!cleanKey.includes('@') && /^\+?[0-9.\-/ ()]+$/.test(cleanKey))) {
+  if (params.pixKeyType === 'cpf') {
+    cleanKey = cleanKey.replace(/\D/g, '').slice(0, 11);
+  } else if (params.pixKeyType === 'cnpj') {
+    cleanKey = cleanKey.replace(/\D/g, '').slice(0, 14);
+  } else if (params.pixKeyType === 'phone') {
     const digits = cleanKey.replace(/\D/g, '');
-    if (digits.length === 11 && (cleanKey.startsWith('(') || cleanKey.startsWith('+') || !cleanKey.includes('.'))) {
+    if (digits.length === 11 || digits.length === 10) {
       cleanKey = digits.startsWith('55') ? `+${digits}` : `+55${digits}`;
-    } else if (digits.length === 10) {
-      cleanKey = `+55${digits}`;
-    } else if (digits.length === 14 || digits.length === 11) {
-      cleanKey = digits;
+    } else if (digits.length === 12 || digits.length === 13) {
+      cleanKey = `+${digits}`;
+    }
+  } else if (params.pixKeyType === 'email') {
+    cleanKey = cleanKey.toLowerCase().trim();
+  } else if (!cleanKey.includes('@') && /^\+?[0-9.\-/ ()]+$/.test(cleanKey)) {
+    const digits = cleanKey.replace(/\D/g, '');
+    if (digits.length === 11) {
+      if (cleanKey.includes('.') || cleanKey.includes('-')) {
+        cleanKey = digits; // CPF
+      } else {
+        cleanKey = digits.startsWith('55') ? `+${digits}` : `+55${digits}`;
+      }
+    } else if (digits.length === 14) {
+      cleanKey = digits; // CNPJ
     }
   }
 

@@ -22,7 +22,9 @@ export interface Company {
   id: string;
   name: string;
   tradeName: string;
-  cnpj: string;
+  documentType?: 'cpf' | 'cnpj';
+  document?: string;
+  cnpj: string; // Keeps backwards compatibility for display and storage
   phone: string;
   email: string;
   zipCode: string;

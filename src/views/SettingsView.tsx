@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import {
   formatCNPJ,
+  formatCPF,
+  validateCPF,
   formatPhone,
   formatCEP,
   formatAddressNumber,
@@ -37,6 +39,10 @@ export const SettingsView: React.FC = () => {
   const [name, setName] = useState(activeCompany.name);
   const [logoUrl, setLogoUrl] = useState(activeCompany.logoUrl || '');
   const [coverUrl, setCoverUrl] = useState(activeCompany.coverUrl || '');
+  
+  const initialDocType = activeCompany.documentType || (activeCompany.cnpj?.replace(/\D/g, '').length === 11 ? 'cpf' : 'cnpj');
+  const [docType, setDocType] = useState<'cpf' | 'cnpj'>(initialDocType);
+  const [documentNumber, setDocumentNumber] = useState(activeCompany.document || activeCompany.cnpj || '');
   const [cnpj, setCnpj] = useState(activeCompany.cnpj);
   const [phone, setPhone] = useState(activeCompany.phone);
   const [email, setEmail] = useState(activeCompany.email);
@@ -50,6 +56,9 @@ export const SettingsView: React.FC = () => {
     setName(activeCompany.name);
     setLogoUrl(activeCompany.logoUrl || '');
     setCoverUrl(activeCompany.coverUrl || '');
+    const dt = activeCompany.documentType || (activeCompany.cnpj?.replace(/\D/g, '').length === 11 ? 'cpf' : 'cnpj');
+    setDocType(dt);
+    setDocumentNumber(activeCompany.document || activeCompany.cnpj || '');
     setCnpj(activeCompany.cnpj);
     setPhone(activeCompany.phone);
     setEmail(activeCompany.email);
@@ -135,7 +144,9 @@ export const SettingsView: React.FC = () => {
 
   // Handle PIX key formatting based on type
   const handlePixKeyChange = (val: string) => {
-    if (pixKeyType === 'cnpj') {
+    if (pixKeyType === 'cpf') {
+      setPixKey(formatCPF(val));
+    } else if (pixKeyType === 'cnpj') {
       setPixKey(formatCNPJ(val));
     } else if (pixKeyType === 'phone') {
       setPixKey(formatPhone(val));
@@ -157,12 +168,16 @@ export const SettingsView: React.FC = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const finalDoc = documentNumber || cnpj;
+
     updateCompanyDetails({
       tradeName,
       name,
       logoUrl,
       coverUrl,
-      cnpj,
+      documentType: docType,
+      document: finalDoc,
+      cnpj: finalDoc, // backward compatibility
       phone,
       email,
       address,
@@ -177,7 +192,8 @@ export const SettingsView: React.FC = () => {
         agency,
         account,
         pixKeyType,
-        pixKey
+        pixKey,
+        document: finalDoc
       },
       paymentConfig: {
         ...activeCompany.paymentConfig,
@@ -245,15 +261,29 @@ export const SettingsView: React.FC = () => {
           {/* Live Preview */}
           <div className="relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 h-36 w-full">
             <img
-              src={coverUrl || '/src/assets/images/hero_beverages_showcase_1790213443501.jpg'}
+              src={coverUrl || '/assets/images/hero_beverages_showcase_1790213443501.jpg'}
               alt="Prévia da Capa"
               className="w-full h-full object-cover opacity-50"
+              onError={e => {
+                const target = e.currentTarget as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
             <div className="absolute bottom-3 left-4 flex items-center gap-3">
               <div className="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-amber-400 p-1 flex items-center justify-center text-3xl shadow-xl overflow-hidden shrink-0">
                 {logoUrl ? (
-                  <img src={logoUrl} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                  <img
+                    src={logoUrl}
+                    alt="Logo"
+                    className="w-full h-full object-cover rounded-xl"
+                    onError={e => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      target.onerror = null;
+                      target.style.display = 'none';
+                    }}
+                  />
                 ) : (
                   <span>🍻</span>
                 )}
@@ -385,23 +415,57 @@ export const SettingsView: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
-                <span>CNPJ</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDocType('cpf');
+                      setDocumentNumber(formatCPF(documentNumber));
+                    }}
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer transition-colors ${
+                      docType === 'cpf' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    CPF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDocType('cnpj');
+                      setDocumentNumber(formatCNPJ(documentNumber));
+                    }}
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer transition-colors ${
+                      docType === 'cnpj' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    CNPJ
+                  </button>
+                </div>
                 <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
-                  getDigitCount(cnpj) === 14 ? 'bg-emerald-500/20 text-emerald-400 font-bold' : 'bg-slate-800 text-slate-400'
+                  (docType === 'cpf' && getDigitCount(documentNumber) === 11) || (docType === 'cnpj' && getDigitCount(documentNumber) === 14)
+                    ? 'bg-emerald-500/20 text-emerald-400 font-bold'
+                    : 'bg-slate-800 text-slate-400'
                 }`}>
-                  {getDigitCount(cnpj)}/14
+                  {getDigitCount(documentNumber)}/{docType === 'cpf' ? '11' : '14'}
                 </span>
-              </label>
+              </div>
               <input
                 type="text"
                 inputMode="numeric"
-                maxLength={18}
-                value={cnpj}
-                onChange={e => setCnpj(formatCNPJ(e.target.value))}
-                placeholder="00.000.000/0001-00"
+                maxLength={docType === 'cpf' ? 14 : 18}
+                value={documentNumber}
+                onChange={e => {
+                  const val = docType === 'cpf' ? formatCPF(e.target.value) : formatCNPJ(e.target.value);
+                  setDocumentNumber(val);
+                  setCnpj(val);
+                }}
+                placeholder={docType === 'cpf' ? '000.000.000-00' : '00.000.000/0001-00'}
                 className="w-full mt-1.5 px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-amber-400"
               />
+              <p className="text-[10px] text-slate-500 mt-1">
+                {docType === 'cpf' ? 'Inscrição por CPF (sem CNPJ)' : 'CNPJ da distribuidora'}
+              </p>
             </div>
             <div>
               <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
@@ -592,20 +656,25 @@ export const SettingsView: React.FC = () => {
                 onChange={e => {
                   const newType = e.target.value as any;
                   setPixKeyType(newType);
-                  if (newType === 'cnpj') setPixKey(formatCNPJ(cnpj));
+                  if (newType === 'cpf') setPixKey(docType === 'cpf' ? documentNumber : formatCPF(documentNumber));
+                  else if (newType === 'cnpj') setPixKey(formatCNPJ(documentNumber));
                   else if (newType === 'phone') setPixKey(formatPhone(phone));
                 }}
                 className="w-full mt-1.5 px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400"
               >
+                <option value="phone">Telefone Celular</option>
+                <option value="cpf">CPF</option>
                 <option value="cnpj">CNPJ</option>
                 <option value="email">E-mail</option>
-                <option value="phone">Telefone Celular</option>
                 <option value="random">Chave Aleatória (EVP)</option>
               </select>
             </div>
             <div className="sm:col-span-2">
               <label className="text-xs font-medium text-slate-300 flex items-center justify-between">
                 <span>Chave PIX Cadastrada *</span>
+                {pixKeyType === 'cpf' && (
+                  <span className="text-[10px] font-mono text-slate-400">{getDigitCount(pixKey)}/11</span>
+                )}
                 {pixKeyType === 'cnpj' && (
                   <span className="text-[10px] font-mono text-slate-400">{getDigitCount(pixKey)}/14</span>
                 )}
@@ -617,7 +686,7 @@ export const SettingsView: React.FC = () => {
                 type="text"
                 value={pixKey}
                 onChange={e => handlePixKeyChange(e.target.value)}
-                maxLength={pixKeyType === 'cnpj' ? 18 : pixKeyType === 'phone' ? 15 : 60}
+                maxLength={pixKeyType === 'cpf' ? 14 : pixKeyType === 'cnpj' ? 18 : pixKeyType === 'phone' ? 15 : 60}
                 className="w-full mt-1.5 px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs font-mono text-emerald-400 font-bold focus:outline-none focus:border-amber-400"
               />
             </div>

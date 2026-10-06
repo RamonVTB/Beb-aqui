@@ -637,7 +637,7 @@ export const SubscriptionView: React.FC = () => {
                   <div>
                     <h4 className="text-xs font-bold text-white">PIX Não Identificado ou Não Concluído</h4>
                     <p className="text-[11px] text-rose-200 mt-0.5">
-                      {pixModalErrorMsg || 'Ainda não identificamos a transferência de R$ 70,00 para o telefone 31975346290.'}
+                      {pixModalErrorMsg || 'Ainda não identificamos a transferência de R$ 80,00 para o telefone 31975346290.'}
                     </p>
                   </div>
                 </div>
@@ -646,7 +646,7 @@ export const SubscriptionView: React.FC = () => {
                   <p className="font-semibold text-rose-300">Dicas para resolver:</p>
                   <p>• Verifique no app do seu banco se o comprovante final foi emitido.</p>
                   <p>• Certifique-se de ter enviado para o telefone <strong>31975346290</strong>.</p>
-                  <p>• O valor deve ser exatamente de <strong>R$ 70,00</strong>.</p>
+                  <p>• O valor deve ser exatamente de <strong>R$ 80,00</strong>.</p>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -680,7 +680,7 @@ export const SubscriptionView: React.FC = () => {
                   className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Conferir e Confirmar Pagamento do PIX (R$ 70)</span>
+                  <span>Conferir e Confirmar Pagamento do PIX (R$ 80)</span>
                 </button>
 
                 {/* Simulation buttons */}

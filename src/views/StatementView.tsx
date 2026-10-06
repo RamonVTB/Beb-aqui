@@ -253,7 +253,7 @@ export const StatementView: React.FC = () => {
             <span>Selecione o Mês para Consulta:</span>
           </span>
           <span className="text-xs text-slate-400">
-            Distribuidora: <strong className="text-white">{activeCompany.tradeName}</strong> ({activeCompany.cnpj})
+            Distribuidora: <strong className="text-white">{activeCompany.tradeName}</strong> ({activeCompany.documentType === 'cpf' ? `CPF: ${activeCompany.document || activeCompany.cnpj}` : activeCompany.cnpj})
           </span>
         </div>
 
@@ -673,8 +673,8 @@ export const StatementView: React.FC = () => {
                   <span className="font-bold text-white text-right truncate max-w-[200px]">{activeCompany.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">CNPJ:</span>
-                  <span className="text-slate-300">{activeCompany.cnpj}</span>
+                  <span className="text-slate-400">{activeCompany.documentType === 'cpf' ? 'CPF:' : 'CNPJ:'}</span>
+                  <span className="text-slate-300">{activeCompany.document || activeCompany.cnpj}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Competência:</span>
@@ -755,7 +755,7 @@ export const StatementView: React.FC = () => {
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs space-y-3">
               <div className="text-center pb-2 border-b border-slate-800">
                 <div className="font-bold text-white text-sm">{activeCompany.tradeName}</div>
-                <div className="text-[10px] text-slate-400">{activeCompany.cnpj}</div>
+                <div className="text-[10px] text-slate-400">{activeCompany.documentType === 'cpf' ? 'CPF: ' : 'CNPJ: '}{activeCompany.document || activeCompany.cnpj}</div>
                 <div className="text-[11px] text-amber-400 mt-1">
                   Pedido {selectedOrderDetails.displayId} — {selectedOrderDetails.type.toUpperCase()}
                 </div>
@@ -877,7 +877,7 @@ export const StatementView: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-2 pt-2">
               <a
                 href={`https://wa.me/55${SUPPORT_PHONE}?text=${encodeURIComponent(
-                  `Olá, equipe BebêAqui! Sou da distribuidora ${activeCompany.tradeName} (CNPJ: ${activeCompany.cnpj}) e gostaria de tirar uma dúvida sobre o extrato do período ${selectedPeriod}.`
+                  `Olá, equipe BebêAqui! Sou da distribuidora ${activeCompany.tradeName} (${activeCompany.documentType === 'cpf' ? 'CPF' : 'CNPJ'}: ${activeCompany.document || activeCompany.cnpj}) e gostaria de tirar uma dúvida sobre o extrato do período ${selectedPeriod}.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

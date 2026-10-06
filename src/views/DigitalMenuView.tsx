@@ -201,10 +201,15 @@ export const DigitalMenuView: React.FC<DigitalMenuViewProps> = ({ onOpenCart }) 
       <div className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl">
         <div className="h-44 sm:h-52 w-full relative">
           <img
-            src={activeCompany.coverUrl || '/src/assets/images/hero_beverages_showcase_1790213443501.jpg'}
+            src={activeCompany.coverUrl || '/assets/images/hero_beverages_showcase_1790213443501.jpg'}
             alt={`Capa de ${activeCompany.tradeName}`}
             className="w-full h-full object-cover object-center opacity-40 transition-all duration-300"
             referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.currentTarget as HTMLImageElement;
+              target.onerror = null;
+              target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
 
@@ -233,6 +238,11 @@ export const DigitalMenuView: React.FC<DigitalMenuViewProps> = ({ onOpenCart }) 
                       src={activeCompany.logoUrl}
                       alt={activeCompany.tradeName}
                       className="w-full h-full object-cover rounded-xl"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.onerror = null;
+                        target.style.display = 'none';
+                      }}
                     />
                   ) : (
                     <span className="text-3xl">🍻</span>
@@ -347,15 +357,29 @@ export const DigitalMenuView: React.FC<DigitalMenuViewProps> = ({ onOpenCart }) 
             {/* Preview Banner */}
             <div className="relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 h-32 w-full">
               <img
-                src={tempCoverUrl || '/src/assets/images/hero_beverages_showcase_1790213443501.jpg'}
+                src={tempCoverUrl || '/assets/images/hero_beverages_showcase_1790213443501.jpg'}
                 alt="Pré-visualização da Capa"
                 className="w-full h-full object-cover opacity-50"
+                onError={e => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = '/assets/images/hero_beverages_showcase_1790213443501.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
               <div className="absolute bottom-3 left-3 flex items-center gap-2.5">
                 <div className="w-12 h-12 rounded-xl bg-slate-900 border-2 border-amber-400 p-0.5 flex items-center justify-center text-2xl shadow-lg overflow-hidden shrink-0">
                   {tempLogoUrl ? (
-                    <img src={tempLogoUrl} alt="Logo preview" className="w-full h-full object-cover rounded-lg" />
+                    <img
+                      src={tempLogoUrl}
+                      alt="Logo preview"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={e => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.onerror = null;
+                        target.style.display = 'none';
+                      }}
+                    />
                   ) : (
                     <span>🍻</span>
                   )}
@@ -613,12 +637,16 @@ export const DigitalMenuView: React.FC<DigitalMenuViewProps> = ({ onOpenCart }) 
               <div className="space-y-3">
                 <div className="relative h-40 rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                   <img
-                    src={product.imageUrl || '/src/assets/images/cervejas_geladas_1790650954103.jpg'}
+                    src={product.imageUrl || '/assets/images/cervejas_geladas_1790650954103.jpg'}
                     alt={product.name}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/src/assets/images/cervejas_geladas_1790650954103.jpg';
+                      const target = e.currentTarget as HTMLImageElement;
+                      target.onerror = null;
+                      if (!target.src.includes('cervejas_geladas')) {
+                        target.src = '/assets/images/cervejas_geladas_1790650954103.jpg';
+                      }
                     }}
                   />
                   {product.volume && (
